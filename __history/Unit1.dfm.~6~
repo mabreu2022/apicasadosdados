@@ -1,0 +1,553 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 623
+  ClientWidth = 899
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  OnCreate = FormCreate
+  TextHeight = 15
+  object DBGrid1: TDBGrid
+    Left = 0
+    Top = 416
+    Width = 899
+    Height = 207
+    Align = alBottom
+    DataSource = DataSource1
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -12
+    TitleFont.Name = 'Segoe UI'
+    TitleFont.Style = []
+  end
+  object Memo1: TMemo
+    Left = 0
+    Top = 0
+    Width = 899
+    Height = 329
+    Align = alTop
+    Lines.Strings = (
+      '{'
+      '    "success": true,'
+      '    "data": {'
+      '        "cnpj": ['
+      '            {'
+      '                "cnpj": "10243367000190",'
+      '                "cnpj_raiz": "10243367",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "MIMADOS \u0026 LATIDOS PET SHOP' +
+        ' LTDA",'
+      '                "nome_fantasia": "",'
+      '                "data_abertura": "2008-07-18T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "212",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "4789004",'
+      
+        '                    "descricao": "Com'#233'rcio varejista de animais ' +
+        'vivos e de artigos e alimentos para animais de estima'#231#227'o"'
+      '                },'
+      '                "cnpj_mei": false,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "45787606000157",'
+      '                "cnpj_raiz": "45787606",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "MARIA DO SOCORRO O. SARMENTO LT' +
+        'DA",'
+      '                "nome_fantasia": "",'
+      '                "data_abertura": "2022-03-25T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "50",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "5510801",'
+      '                    "descricao": "Hot'#233'is"'
+      '                },'
+      '                "cnpj_mei": false,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "43401367000120",'
+      '                "cnpj_raiz": "43401367",'
+      '                "filial_numero": 1,'
+      '                "razao_social": "LUX TECH LTDA",'
+      '                "nome_fantasia": "",'
+      '                "data_abertura": "2021-09-03T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "164",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "6319400",'
+      
+        '                    "descricao": "Portais, provedores de conte'#250'd' +
+        'o e outros servi'#231'os de informa'#231#227'o na internet"'
+      '                },'
+      '                "cnpj_mei": false,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "47283288000112",'
+      '                "cnpj_raiz": "47283288",'
+      '                "filial_numero": 1,'
+      '                "razao_social": "M C CONSTRUTORA LTDA",'
+      '                "nome_fantasia": "M C CONSTRUTORA",'
+      '                "data_abertura": "1975-08-26T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "164",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "4120400",'
+      '                    "descricao": "Constru'#231#227'o de edif'#237'cios"'
+      '                },'
+      '                "cnpj_mei": false,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "32824517000191",'
+      '                "cnpj_raiz": "32824517",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "BEATRIZ ANDRADE BATISTA 3969324' +
+        '0847",'
+      '                "nome_fantasia": "ENSINANDO A APRENDER",'
+      '                "data_abertura": "2019-02-19T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "173",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "8599699",'
+      
+        '                    "descricao": "Outras atividades de ensino n'#227 +
+        'o especificadas anteriormente"'
+      '                },'
+      '                "cnpj_mei": true,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "34201476000102",'
+      '                "cnpj_raiz": "34201476",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "MARIZA SIRIBELI LUCHINI 0563260' +
+        '1811",'
+      
+        '                "nome_fantasia": "TEC PROMOCAO E TREINAMENTO EMP' +
+        'RESARIAL",'
+      '                "data_abertura": "2019-07-12T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "275",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "8230001",'
+      
+        '                    "descricao": "Servi'#231'os de organiza'#231#227'o de fei' +
+        'ras, congressos, exposi'#231#245'es e festas"'
+      '                },'
+      '                "cnpj_mei": true,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "33973290000109",'
+      '                "cnpj_raiz": "33973290",'
+      '                "filial_numero": 1,'
+      '                "razao_social": "LUZIA DOS SANTO NUNES LTDA",'
+      '                "nome_fantasia": "ALDEBARAN",'
+      '                "data_abertura": "2019-06-19T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "131",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "2539001",'
+      
+        '                    "descricao": "Servi'#231'os de usinagem, torneari' +
+        'a e solda"'
+      '                },'
+      '                "cnpj_mei": false,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "34023963000122",'
+      '                "cnpj_raiz": "34023963",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "VIVIANE MARTIN BAROCA 287708248' +
+        '27",'
+      '                "nome_fantasia": "VIVIANE BAROCA",'
+      '                "data_abertura": "2019-06-25T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "468",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "8219999",'
+      
+        '                    "descricao": "Prepara'#231#227'o de documentos e ser' +
+        'vi'#231'os especializados de apoio administrativo n'#227'o especificados a' +
+        'nteriormente"'
+      '                },'
+      '                "cnpj_mei": true,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "36454095000160",'
+      '                "cnpj_raiz": "36454095",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "DANIELE DOS SANTOS BATISTA BARB' +
+        'OSA 29422651832",'
+      
+        '                "nome_fantasia": "DANIELE DOS SANTOS BATISTA BAR' +
+        'BOSA",'
+      '                "data_abertura": "2020-02-21T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "173",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "8219999",'
+      
+        '                    "descricao": "Prepara'#231#227'o de documentos e ser' +
+        'vi'#231'os especializados de apoio administrativo n'#227'o especificados a' +
+        'nteriormente"'
+      '                },'
+      '                "cnpj_mei": true,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "44357622000147",'
+      '                "cnpj_raiz": "44357622",'
+      '                "filial_numero": 1,'
+      '                "razao_social": "OTICA E RELOJOARIA RUDGE LTDA",'
+      '                "nome_fantasia": "",'
+      '                "data_abertura": "1972-10-19T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "193",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "4774100",'
+      
+        '                    "descricao": "Com'#233'rcio varejista de artigos ' +
+        'de '#243'ptica"'
+      '                },'
+      '                "cnpj_mei": false,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "50874160000138",'
+      '                "cnpj_raiz": "50874160",'
+      '                "filial_numero": 1,'
+      '                "razao_social": "COCORICOMPANY LTDA",'
+      '                "nome_fantasia": "COCORICOMPANY",'
+      '                "data_abertura": "2023-05-30T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "118",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "7319003",'
+      '                    "descricao": "Marketing direto"'
+      '                },'
+      '                "cnpj_mei": false,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "49369271000108",'
+      '                "cnpj_raiz": "49369271",'
+      '                "filial_numero": 1,'
+      '                "razao_social": "49.369.271 FLAVIA CALIN LEMOS",'
+      '                "nome_fantasia": "FLAVIA K",'
+      '                "data_abertura": "2023-01-27T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "173",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "9001902",'
+      '                    "descricao": "Produ'#231#227'o musical"'
+      '                },'
+      '                "cnpj_mei": true,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "21257372000178",'
+      '                "cnpj_raiz": "21257372",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "DIEGO GONCALVES DE SOUZA 306862' +
+        '97806",'
+      '                "nome_fantasia": "MR. BRECHO",'
+      '                "data_abertura": "2014-10-20T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "174",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "4785799",'
+      
+        '                    "descricao": "Com'#233'rcio varejista de outros a' +
+        'rtigos usados"'
+      '                },'
+      '                "cnpj_mei": false,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "19686352000170",'
+      '                "cnpj_raiz": "19686352",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "AMBAR ADMINISTRACAO DE IMOVEIS ' +
+        'LTDA",'
+      '                "nome_fantasia": "AMBAR ADMINISTRACAO",'
+      '                "data_abertura": "2014-02-10T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "86",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "6822600",'
+      
+        '                    "descricao": "Gest'#227'o e administra'#231#227'o da prop' +
+        'riedade imobili'#225'ria"'
+      '                },'
+      '                "cnpj_mei": false,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "21096430000129",'
+      '                "cnpj_raiz": "21096430",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "21.096.430 PAULO RICARDO FABRI"' +
+        ','
+      '                "nome_fantasia": "MILLENNIUM CARD GAMES",'
+      '                "data_abertura": "2014-09-23T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "237",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "4763601",'
+      
+        '                    "descricao": "Com'#233'rcio varejista de brinqued' +
+        'os e artigos recreativos"'
+      '                },'
+      '                "cnpj_mei": true,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "20595717000130",'
+      '                "cnpj_raiz": "20595717",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "HAIR THERAPY CABELEIREIROS UNIS' +
+        'SEX LTDA",'
+      '                "nome_fantasia": "",'
+      '                "data_abertura": "2014-07-08T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "117",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "9602501",'
+      
+        '                    "descricao": "Cabeleireiros, manicure e pedi' +
+        'cure"'
+      '                },'
+      '                "cnpj_mei": false,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "12915400000106",'
+      '                "cnpj_raiz": "12915400",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "LARA MILICI COMERCIO E SERVICOS' +
+        ' LTDA",'
+      '                "nome_fantasia": "",'
+      '                "data_abertura": "2010-11-01T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "258",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "4741500",'
+      
+        '                    "descricao": "Com'#233'rcio varejista de tintas e' +
+        ' materiais para pintura"'
+      '                },'
+      '                "cnpj_mei": false,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "40714856000143",'
+      '                "cnpj_raiz": "40714856",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "EDUKKA SEMPRE CURSOS LIVRES LTD' +
+        'A",'
+      '                "nome_fantasia": "",'
+      '                "data_abertura": "2021-02-04T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "101",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "8599699",'
+      
+        '                    "descricao": "Outras atividades de ensino n'#227 +
+        'o especificadas anteriormente"'
+      '                },'
+      '                "cnpj_mei": false,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "38234256000136",'
+      '                "cnpj_raiz": "38234256",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "BRUNA ANDRESSA PINTO DA SILVA 3' +
+        '7829418888",'
+      '                "nome_fantasia": "",'
+      '                "data_abertura": "2020-08-26T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "504",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "5620104",'
+      
+        '                    "descricao": "Fornecimento de alimentos prep' +
+        'arados preponderantemente para consumo domiciliar"'
+      '                },'
+      '                "cnpj_mei": true,'
+      '                "versao": "v3"'
+      '            },'
+      '            {'
+      '                "cnpj": "39275727000117",'
+      '                "cnpj_raiz": "39275727",'
+      '                "filial_numero": 1,'
+      
+        '                "razao_social": "CLEA SILVA DE JESUS 03633287507' +
+        '",'
+      '                "nome_fantasia": "AUTOMO",'
+      '                "data_abertura": "2020-10-01T00:00:00Z",'
+      '                "situacao_cadastral": "ATIVA",'
+      '                "logradouro": "RUA JACQUEY",'
+      '                "numero": "504",'
+      '                "bairro": "RUDGE RAMOS",'
+      '                "municipio": "SAO BERNARDO DO CAMPO",'
+      '                "uf": "SP",'
+      '                "atividade_principal": {'
+      '                    "codigo": "9602501",'
+      
+        '                    "descricao": "Cabeleireiros, manicure e pedi' +
+        'cure"'
+      '                },'
+      '                "cnpj_mei": true,'
+      '                "versao": "v3"'
+      '            }'
+      '        ],'
+      '        "count": 112'
+      '    },'
+      '    "page": {'
+      '        "current": 1'
+      '    }'
+      '}')
+    TabOrder = 1
+    ExplicitWidth = 893
+  end
+  object Button1: TButton
+    Left = 288
+    Top = 336
+    Width = 75
+    Height = 25
+    Caption = 'Button1'
+    TabOrder = 2
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 512
+    Top = 344
+    Width = 75
+    Height = 25
+    Caption = 'Importar'
+    TabOrder = 3
+    OnClick = Button2Click
+  end
+  object FDMemTable1: TFDMemTable
+    FieldDefs = <>
+    IndexDefs = <>
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    StoreDefs = True
+    Left = 56
+    Top = 352
+  end
+  object DataSource1: TDataSource
+    DataSet = FDMemTable1
+    Left = 160
+    Top = 360
+  end
+end
