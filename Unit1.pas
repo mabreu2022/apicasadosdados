@@ -38,7 +38,7 @@ uses
   FireDAC.VCLUI.Wait,
   FireDAC.DApt,
   Unit2,
-  IniFiles, Vcl.ExtCtrls;
+  IniFiles, Vcl.ExtCtrls, Vcl.WinXCtrls;
 
 type
   TForm1 = class(TForm)
@@ -57,6 +57,38 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Button1: TButton;
+    EdtRazaoSocial: TEdit;
+    EdtKnae: TEdit;
+    EdtNaturezaJuridica: TEdit;
+    EdtDDD: TEdit;
+    EdtDataAberturaAPartirDe: TEdit;
+    EdtDataAberturaAte: TEdit;
+    CBAtivaInativa: TComboBox;
+    Label1: TLabel;
+    Label5: TLabel;
+    Label7: TLabel;
+    Label6: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    ToggleSwitch1: TToggleSwitch;
+    ToggleSwitch2: TToggleSwitch;
+    ToggleSwitch3: TToggleSwitch;
+    ToggleSwitch4: TToggleSwitch;
+    ToggleSwitch5: TToggleSwitch;
+    ToggleSwitch6: TToggleSwitch;
+    ToggleSwitch7: TToggleSwitch;
+    ToggleSwitch8: TToggleSwitch;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    ToggleSwitch9: TToggleSwitch;
+    Label20: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -81,11 +113,14 @@ var
   LResponse: IResponse;
   LJson: string;
 begin
-
-   TMyConst.AtualizarUF(EditUF.Text);
-   TMyConst.AtualizarMunicipio(EditMunicipio.Text);
-   TMyConst.AtualizarBairro(EditBairro.Text);
-   TMyConst.AtualizarCEP(EditCEP.Text);
+   if Trim(EditUF.Text)<>'' then
+     TMyConst.AtualizarUF(EditUF.Text);
+   if Trim(EditMunicipio.Text)<>'' then
+     TMyConst.AtualizarMunicipio(EditMunicipio.Text);
+   if Trim(EditBairro.Text)<>'' then
+     TMyConst.AtualizarBairro(EditBairro.Text);
+   if Trim(EditCEP.Text)<>'' then
+     TMyConst.AtualizarCEP(EditCEP.Text);
 
     Ljson:= TMyConst.JSON;
 
@@ -212,6 +247,7 @@ begin
       Connection.Params.Values['User_Name'] := IniFile.ReadString('MySQLConfig', 'User_Name', '');
       Connection.Params.Values['Password']  := IniFile.ReadString('MySQLConfig', 'Password', '');
       Connection.Params.Values['Database']  := IniFile.ReadString('MySQLConfig', 'Database', '');
+      Connection.Params.Values['Port']      := IniFile.ReadString('MySQLConfig', 'Port', '');
     finally
       IniFile.Free;
     end;
