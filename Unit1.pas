@@ -38,7 +38,7 @@ uses
   FireDAC.VCLUI.Wait,
   FireDAC.DApt,
   Unit2,
-  IniFiles;
+  IniFiles, Vcl.ExtCtrls;
 
 type
   TForm1 = class(TForm)
@@ -46,9 +46,17 @@ type
     Memo1: TMemo;
     FDMemTable1: TFDMemTable;
     DataSource1: TDataSource;
+    GroupBox1: TGroupBox;
+    Panel1: TPanel;
+    Edt_Estado: TEdit;
+    Edt_Municipio: TEdit;
+    Edt_Bairro: TEdit;
+    Edt_CEP: TEdit;
+    Lbl_Estado: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
     Button1: TButton;
-    Button2: TButton;
-    FDConnection1: TFDConnection;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -73,18 +81,18 @@ var
   LResponse: IResponse;
   LJson: string;
 begin
-  Ljson:= TMyConst.JSON;
+    Ljson:= TMyConst.JSON;
 
-  LResponse :=
+    LResponse :=
         TRequest.New.BaseURL('https://api.casadosdados.com.br/v2/public/cnpj/search')
         .Accept('application/json')
         .AddBody(FormatarJSON(Ljson))
         .Post;
 
+      memo1.Lines.Add(FormatarJSON(LResponse.Content));
+      memo1.Perform(WM_VSCROLL,SB_THUMBPOSITION,0);
+      CarregarJSONParaFDMemTable(Memo1.Text, FDMemTable1);
 
-   memo1.Lines.Add(FormatarJSON(LResponse.Content));
-   memo1.Perform(WM_VSCROLL,SB_THUMBPOSITION,0);
-   CarregarJSONParaFDMemTable(Memo1.Text, FDMemTable1);
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -137,16 +145,20 @@ begin
   MemTable.CreateDataSet;
 
   // Converte a string JSON para um objeto JSON
+  JSONObject:=  TJSONObject.Create;
   JSONObject := TJSONObject.ParseJSONValue(JSONString) as TJSONObject;
   try
     // Obtém o objeto 'data' do JSON
+    DataObject:= TJSONObject.Create;
     DataObject := JSONObject.GetValue('data') as TJSONObject;
 
     // Obtém o array 'cnpj' do objeto 'data'
+    CNPJsArray:= TJSONArray.Create;
     CNPJsArray := DataObject.GetValue('cnpj') as TJSONArray;
 
     // Itera sobre os objetos CNPJ no array
-    for I := 0 to CNPJsArray.Count - 1 do
+    //for I := 0 to CNPJsArray.Count - 1 do
+    for I := 0 to CNPJsArray.Size - 1 do
     begin
       // Obtém o objeto CNPJ
       CNPJObject := CNPJsArray.Items[I] as TJSONObject;
@@ -180,6 +192,8 @@ begin
   finally
     // Libera o objeto JSON
     JSONObject.Free;
+    DataObject.Free;
+    CNPJsArray.Free;
 
     //Gravar no Banco de dados
     Connection := TFDConnection.Create(nil);
@@ -200,44 +214,55 @@ begin
 
     //Showmessage(IntToStr(MemTable.RecordCount));
 
-    MemTable.First;
-    while not MemTable.Eof do
-    begin
-        Qry:= TFDQuery.Create(nil);
-        Qry.Connection:= Connection;
-        try
-          Qry.SQL.Clear;
-          Qry.SQL.Add('INSERT INTO clientes (' +
-                      'cnpj, cnpj_raiz, filial_numero, razao_social, nome_fantasia, ' +
-                      'data_abertura, situacao_cadastral, logradouro, numero, bairro, ' +
-                      'municipio, uf, codigo, descricao, cnpj_mei, versao) ' +
-                      'VALUES (:cnpj, :cnpj_raiz, :filial_numero, :razao_social, :nome_fantasia, ' +
-                      ':data_abertura, :situacao_cadastral, :logradouro, :numero, :bairro, ' +
-                      ':municipio, :uf, :codigo, :descricao, :cnpj_mei, :versao)');
+    //Inicia a Transação com o banco
+    try
+      Connection.StartTransaction;
 
-          Qry.ParamByName('cnpj').AsString                := MemTable.FieldByName('cnpj').AsString;
-          Qry.ParamByName('cnpj_raiz').AsString           := MemTable.FieldByName('cnpj_raiz').AsString;
-          Qry.ParamByName('filial_numero').AsInteger      := MemTable.FieldByName('filial_numero').AsInteger;
-          Qry.ParamByName('razao_social').AsString        := MemTable.FieldByName('razao_social').AsString;
-          Qry.ParamByName('nome_fantasia').AsString       := MemTable.FieldByName('nome_fantasia').AsString;
-          Qry.ParamByName('data_abertura').AsString       := MemTable.FieldByName('data_abertura').AsString;
-          Qry.ParamByName('situacao_cadastral').AsString  := MemTable.FieldByName('situacao_cadastral').AsString;
-          Qry.ParamByName('logradouro').AsString          := MemTable.FieldByName('logradouro').AsString;
-          Qry.ParamByName('numero').AsString              := MemTable.FieldByName('numero').AsString;
-          Qry.ParamByName('bairro').AsString              := MemTable.FieldByName('bairro').AsString;
-          Qry.ParamByName('municipio').AsString           := MemTable.FieldByName('municipio').AsString;
-          Qry.ParamByName('uf').AsString                  := MemTable.FieldByName('uf').AsString;
-          Qry.ParamByName('codigo').AsString              := MemTable.FieldByName('atividade_codigo').AsString;
-          Qry.ParamByName('descricao').AsString           := MemTable.FieldByName('atividade_descricao').AsString;
-          Qry.ParamByName('cnpj_mei').AsBoolean           := MemTable.FieldByName('cnpj_mei').AsBoolean;
-          Qry.ParamByName('versao').AsString              := MemTable.FieldByName('versao').AsString;
+      MemTable.First;
+      while not MemTable.Eof do
+      begin
+          Qry:= TFDQuery.Create(nil);
+          Qry.Connection:= Connection;
+          try
+            Qry.SQL.Clear;
+            Qry.SQL.Add('INSERT INTO clientes (' +
+                        'cnpj, cnpj_raiz, filial_numero, razao_social, nome_fantasia, ' +
+                        'data_abertura, situacao_cadastral, logradouro, numero, bairro, ' +
+                        'municipio, uf, codigo, descricao, cnpj_mei, versao) ' +
+                        'VALUES (:cnpj, :cnpj_raiz, :filial_numero, :razao_social, :nome_fantasia, ' +
+                        ':data_abertura, :situacao_cadastral, :logradouro, :numero, :bairro, ' +
+                        ':municipio, :uf, :codigo, :descricao, :cnpj_mei, :versao)');
 
-          Qry.ExecSQL;
-          MemTable.Next;
-        finally
-          Qry.Free;
-        end;
+            Qry.ParamByName('cnpj').AsString                := MemTable.FieldByName('cnpj').AsString;
+            Qry.ParamByName('cnpj_raiz').AsString           := MemTable.FieldByName('cnpj_raiz').AsString;
+            Qry.ParamByName('filial_numero').AsInteger      := MemTable.FieldByName('filial_numero').AsInteger;
+            Qry.ParamByName('razao_social').AsString        := MemTable.FieldByName('razao_social').AsString;
+            Qry.ParamByName('nome_fantasia').AsString       := MemTable.FieldByName('nome_fantasia').AsString;
+            Qry.ParamByName('data_abertura').AsString       := MemTable.FieldByName('data_abertura').AsString;
+            Qry.ParamByName('situacao_cadastral').AsString  := MemTable.FieldByName('situacao_cadastral').AsString;
+            Qry.ParamByName('logradouro').AsString          := MemTable.FieldByName('logradouro').AsString;
+            Qry.ParamByName('numero').AsString              := MemTable.FieldByName('numero').AsString;
+            Qry.ParamByName('bairro').AsString              := MemTable.FieldByName('bairro').AsString;
+            Qry.ParamByName('municipio').AsString           := MemTable.FieldByName('municipio').AsString;
+            Qry.ParamByName('uf').AsString                  := MemTable.FieldByName('uf').AsString;
+            Qry.ParamByName('codigo').AsString              := MemTable.FieldByName('atividade_codigo').AsString;
+            Qry.ParamByName('descricao').AsString           := MemTable.FieldByName('atividade_descricao').AsString;
+            Qry.ParamByName('cnpj_mei').AsBoolean           := MemTable.FieldByName('cnpj_mei').AsBoolean;
+            Qry.ParamByName('versao').AsString              := MemTable.FieldByName('versao').AsString;
 
+            Qry.ExecSQL;
+            MemTable.Next;
+          finally
+            Qry.Free;
+            Connection.Commit;
+          end;
+
+      end;
+    Except  on E: Exception do
+      begin
+         Connection.Rollback;
+         ShowMessage('Erro durante a transação: ' + E.Message);
+      end;
     end;
 
   end;
