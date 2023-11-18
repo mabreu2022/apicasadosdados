@@ -170,12 +170,6 @@ var
   I: Integer;
   Qry: TFDquery;
   Connection: TFDConnection;
-  Query: TFDQuery;
-  ScriptFile: TStringList;
-  OpenDialog: TOpenDialog;
-  ScriptText: string;
-  ScriptsPath: string;
-  DatabaseName: string;
   IniFile: TIniFile;
   RespostaUsuario: Integer;
 begin
@@ -254,7 +248,7 @@ begin
     // Libera o objeto JSON
     //JSONObject.Free;
     //DataObject.Free;
-    CNPJsArray.Free;
+    //CNPJsArray.Free;
 
     //Gravar no Banco de dados
     RespostaUsuario := MessageDlg('Deseja gravar os dados?', mtConfirmation, mbYesNo, 0);
