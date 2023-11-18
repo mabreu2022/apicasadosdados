@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
-  <Transactions/>
-  <Default.Personality>
-    <Projects ActiveProject="C:\Fontes\WheelPro\WheelPro\CriadorDeBancoWheelPro\CriadorBancoWheelPro.dproj"/>
-  </Default.Personality>
+	<Transactions/>
+	<Default.Personality>
+		<Projects ActiveProject="C:\Fontes\fred\Project1.dproj"/>
+	</Default.Personality>
 </BorlandProject>

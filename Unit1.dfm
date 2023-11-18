@@ -10,8 +10,82 @@ object Form1: TForm1
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  Position = poScreenCenter
   OnCreate = FormCreate
   TextHeight = 15
+  object GroupBox1: TGroupBox
+    Left = 0
+    Top = 241
+    Width = 899
+    Height = 134
+    Align = alClient
+    Caption = 'Par'#226'metros'
+    TabOrder = 2
+    ExplicitLeft = 8
+    ExplicitTop = 247
+    ExplicitWidth = 416
+    ExplicitHeight = 130
+    object Lbl_Estado: TLabel
+      Left = 24
+      Top = 16
+      Width = 17
+      Height = 15
+      Caption = ' UF'
+    end
+    object Label2: TLabel
+      Left = 200
+      Top = 16
+      Width = 54
+      Height = 15
+      Caption = 'Municipio'
+    end
+    object Label3: TLabel
+      Left = 24
+      Top = 64
+      Width = 31
+      Height = 15
+      Caption = 'Bairro'
+    end
+    object Label4: TLabel
+      Left = 200
+      Top = 64
+      Width = 21
+      Height = 15
+      Caption = 'CEP'
+    end
+    object Edt_CEP: TEdit
+      Left = 200
+      Top = 80
+      Width = 121
+      Height = 23
+      TabOrder = 3
+      TextHint = 'CEP'
+    end
+    object Edt_Bairro: TEdit
+      Left = 24
+      Top = 80
+      Width = 121
+      Height = 23
+      TabOrder = 2
+      TextHint = 'Bairro'
+    end
+    object Edt_Municipio: TEdit
+      Left = 200
+      Top = 35
+      Width = 121
+      Height = 23
+      TabOrder = 1
+      TextHint = 'Munic'#237'pio'
+    end
+    object Edt_Estado: TEdit
+      Left = 24
+      Top = 35
+      Width = 121
+      Height = 23
+      TabOrder = 0
+      TextHint = 'Estado UF'
+    end
+  end
   object DBGrid1: TDBGrid
     Left = 0
     Top = 416
@@ -30,28 +104,33 @@ object Form1: TForm1
     Left = 0
     Top = 0
     Width = 899
-    Height = 329
+    Height = 241
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 893
   end
-  object Button1: TButton
-    Left = 288
-    Top = 336
-    Width = 75
-    Height = 25
-    Caption = 'Button1'
-    TabOrder = 2
-    OnClick = Button1Click
-  end
-  object Button2: TButton
-    Left = 512
-    Top = 344
-    Width = 75
-    Height = 25
-    Caption = 'Importar'
+  object Panel1: TPanel
+    Left = 0
+    Top = 375
+    Width = 899
+    Height = 41
+    Align = alBottom
     TabOrder = 3
-    OnClick = Button2Click
+    ExplicitTop = 383
+    object Button1: TButton
+      AlignWithMargins = True
+      Left = 813
+      Top = 4
+      Width = 75
+      Height = 33
+      Margins.Right = 10
+      Align = alRight
+      Caption = 'Enviar'
+      TabOrder = 0
+      OnClick = Button1Click
+      ExplicitLeft = 816
+      ExplicitTop = 10
+      ExplicitHeight = 25
+    end
   end
   object FDMemTable1: TFDMemTable
     FieldDefs = <>
@@ -64,21 +143,12 @@ object Form1: TForm1
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
     StoreDefs = True
-    Left = 56
-    Top = 352
+    Left = 592
+    Top = 472
   end
   object DataSource1: TDataSource
     DataSet = FDMemTable1
-    Left = 160
-    Top = 360
-  end
-  object FDConnection1: TFDConnection
-    Params.Strings = (
-      'Database=fred'
-      'User_Name=root'
-      'Password=19741974'
-      'DriverID=MySQL')
-    Left = 168
-    Top = 128
+    Left = 720
+    Top = 480
   end
 end
