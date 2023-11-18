@@ -3,11 +3,30 @@ unit Unit2;
 
 interface
 
+uses
+  System.SysUtils;
+
 type
 TMyConst = class
   private
+    class var FJSON: string;
   public
-  const JSON = '{'+
+   class constructor Create;
+   class property JSON: string read FJSON write FJSON;
+   class procedure AtualizarUF(const novaUF: string);
+   class procedure AtualizarMunicipio(const novoMunicipio: string);
+   class procedure AtualizarBairro(const novoBairro: string);
+   class procedure AtualizarCEP(const novoCEP: string);
+
+end;
+
+implementation
+
+{ TMyConst }
+
+class constructor TMyConst.Create;
+begin
+  FJSON :=  '{'+
   '"query": {'+
   '"termo": [],'+
   '"atividade_principal": [],'+
@@ -49,10 +68,31 @@ TMyConst = class
   '"page": 1'+
   '}';
 
+  inherited;
 end;
 
-implementation
+class procedure TMyConst.AtualizarBairro(const novoBairro: string);
+begin
+  // Substituir os valores no JSON
+  JSON := StringReplace(JSON, '"bairro": ["Jardim Aquarius"]', '"bairro": ["' + novoBairro + '"]', []);
+end;
 
+class procedure TMyConst.AtualizarCEP(const novoCEP: string);
+begin
+  // Substituir os valores no JSON para o CEP
+  FJSON := StringReplace(FJSON, '"cep": []', '"cep": ["' + novoCEP + '"]', []);
+end;
 
+class procedure TMyConst.AtualizarMunicipio(const novoMunicipio: string);
+begin
+  // Substituir os valores no JSON
+  JSON := StringReplace(JSON, '"municipio": ["SAO JOSE DOS CAMPOS"]', '"municipio": ["' + novoMunicipio + '"]', []);
+end;
+
+class procedure TMyConst.AtualizarUF(const novaUF: string);
+begin
+  // Substituir os valores no JSON
+  JSON := StringReplace(JSON, '"uf": ["SP"]', '"uf": ["' + novaUF + '"]', []);
+end;
 
 end.

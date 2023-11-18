@@ -53,7 +53,7 @@ object Form1: TForm1
       Height = 15
       Caption = 'CEP'
     end
-    object Edt_CEP: TEdit
+    object EditCEP: TEdit
       Left = 200
       Top = 80
       Width = 121
@@ -61,7 +61,7 @@ object Form1: TForm1
       TabOrder = 3
       TextHint = 'CEP'
     end
-    object Edt_Bairro: TEdit
+    object EditBairro: TEdit
       Left = 24
       Top = 80
       Width = 121
@@ -69,7 +69,7 @@ object Form1: TForm1
       TabOrder = 2
       TextHint = 'Bairro'
     end
-    object Edt_Municipio: TEdit
+    object EditMunicipio: TEdit
       Left = 200
       Top = 35
       Width = 121
@@ -77,7 +77,7 @@ object Form1: TForm1
       TabOrder = 1
       TextHint = 'Munic'#237'pio'
     end
-    object Edt_Estado: TEdit
+    object EditUF: TEdit
       Left = 24
       Top = 35
       Width = 121
