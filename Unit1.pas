@@ -48,10 +48,10 @@ type
     DataSource1: TDataSource;
     GroupBox1: TGroupBox;
     Panel1: TPanel;
-    Edt_Estado: TEdit;
-    Edt_Municipio: TEdit;
-    Edt_Bairro: TEdit;
-    Edt_CEP: TEdit;
+    EditUF: TEdit;
+    EditMunicipio: TEdit;
+    EditBairro: TEdit;
+    EditCEP: TEdit;
     Lbl_Estado: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -81,6 +81,12 @@ var
   LResponse: IResponse;
   LJson: string;
 begin
+
+   TMyConst.AtualizarUF(EditUF.Text);
+   TMyConst.AtualizarMunicipio(EditMunicipio.Text);
+   TMyConst.AtualizarBairro(EditBairro.Text);
+   TMyConst.AtualizarCEP(EditCEP.Text);
+
     Ljson:= TMyConst.JSON;
 
     LResponse :=
@@ -191,9 +197,9 @@ begin
     end;
   finally
     // Libera o objeto JSON
-    JSONObject.Free;
-    DataObject.Free;
-    CNPJsArray.Free;
+    //JSONObject.Free;
+    //DataObject.Free;
+    //CNPJsArray.Free;
 
     //Gravar no Banco de dados
     Connection := TFDConnection.Create(nil);
