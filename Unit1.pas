@@ -89,6 +89,8 @@ type
     Label19: TLabel;
     ToggleSwitch9: TToggleSwitch;
     Label20: TLabel;
+    EdtPagina: TEdit;
+    Label8: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -111,7 +113,9 @@ implementation
 procedure TForm1.Button1Click(Sender: TObject);
 var
   LResponse: IResponse;
-  LJson: string;
+  LJson    : string;
+  C        : integer;
+  D        : Integer;
 begin
    if Trim(EditUF.Text)<>'' then
      TMyConst.AtualizarUF(EditUF.Text);
@@ -122,17 +126,32 @@ begin
    if Trim(EditCEP.Text)<>'' then
      TMyConst.AtualizarCEP(EditCEP.Text);
 
+
     Ljson:= TMyConst.JSON;
 
-    LResponse :=
-        TRequest.New.BaseURL('https://api.casadosdados.com.br/v2/public/cnpj/search')
-        .Accept('application/json')
-        .AddBody(FormatarJSON(Ljson))
-        .Post;
+    D:= StrToInt(EdtPagina.Text);
+
+    for C := 1 to D do
+    begin
+
+      TMyConst.AtualizarPagina(IntToStr(C));
+      LResponse :=
+         TRequest.New.BaseURL('https://api.casadosdados.com.br/v2/public/cnpj/search')
+         .Accept('application/json')
+         .AddBody(Ljson)
+         //.AddBody(FormatarJSON(Ljson))
+         .Post;
 
       memo1.Lines.Add(FormatarJSON(LResponse.Content));
       memo1.Perform(WM_VSCROLL,SB_THUMBPOSITION,0);
       CarregarJSONParaFDMemTable(Memo1.Text, FDMemTable1);
+
+      if LResponse.StatusCode <> 200 then
+      begin
+        ShowMessage('Não existem mais dados para essa pesquisa');
+        exit;
+      end;
+    end;
 
 end;
 
@@ -158,6 +177,7 @@ var
   ScriptsPath: string;
   DatabaseName: string;
   IniFile: TIniFile;
+  RespostaUsuario: Integer;
 begin
   // Limpa os dados existentes na FDMemTable
   MemTable.Close;
@@ -234,81 +254,90 @@ begin
     // Libera o objeto JSON
     //JSONObject.Free;
     //DataObject.Free;
-    //CNPJsArray.Free;
+    CNPJsArray.Free;
 
     //Gravar no Banco de dados
-    Connection := TFDConnection.Create(nil);
+    RespostaUsuario := MessageDlg('Deseja gravar os dados?', mtConfirmation, mbYesNo, 0);
+    // Verificar a resposta do usuário
+    if RespostaUsuario = mrYes then
+    begin
+      Connection := TFDConnection.Create(nil);
 
-    //Ideal Ler de um arquivo Ini para não ficar enjessado
-    Connection.DriverName := 'MySQL'; // Driver do FireDAC para MySQL
-    IniFile := TIniFile.Create(ExtractFilePath(Application.ExeName) +'\config.ini');
-    try
-      Connection.Params.Values['Server']    := IniFile.ReadString('MySQLConfig', 'Server', '');
-      Connection.Params.Values['User_Name'] := IniFile.ReadString('MySQLConfig', 'User_Name', '');
-      Connection.Params.Values['Password']  := IniFile.ReadString('MySQLConfig', 'Password', '');
-      Connection.Params.Values['Database']  := IniFile.ReadString('MySQLConfig', 'Database', '');
-      Connection.Params.Values['Port']      := IniFile.ReadString('MySQLConfig', 'Port', '');
-    finally
-      IniFile.Free;
-    end;
-
-    Connection.Connected := True;
-
-    //Showmessage(IntToStr(MemTable.RecordCount));
-
-    //Inicia a Transação com o banco
-    try
-      Connection.StartTransaction;
-
-      MemTable.First;
-      while not MemTable.Eof do
-      begin
-          Qry:= TFDQuery.Create(nil);
-          Qry.Connection:= Connection;
-          try
-            Qry.SQL.Clear;
-            Qry.SQL.Add('INSERT INTO clientes (' +
-                        'cnpj, cnpj_raiz, filial_numero, razao_social, nome_fantasia, ' +
-                        'data_abertura, situacao_cadastral, logradouro, numero, bairro, ' +
-                        'municipio, uf, codigo, descricao, cnpj_mei, versao) ' +
-                        'VALUES (:cnpj, :cnpj_raiz, :filial_numero, :razao_social, :nome_fantasia, ' +
-                        ':data_abertura, :situacao_cadastral, :logradouro, :numero, :bairro, ' +
-                        ':municipio, :uf, :codigo, :descricao, :cnpj_mei, :versao)');
-
-            Qry.ParamByName('cnpj').AsString                := MemTable.FieldByName('cnpj').AsString;
-            Qry.ParamByName('cnpj_raiz').AsString           := MemTable.FieldByName('cnpj_raiz').AsString;
-            Qry.ParamByName('filial_numero').AsInteger      := MemTable.FieldByName('filial_numero').AsInteger;
-            Qry.ParamByName('razao_social').AsString        := MemTable.FieldByName('razao_social').AsString;
-            Qry.ParamByName('nome_fantasia').AsString       := MemTable.FieldByName('nome_fantasia').AsString;
-            Qry.ParamByName('data_abertura').AsString       := MemTable.FieldByName('data_abertura').AsString;
-            Qry.ParamByName('situacao_cadastral').AsString  := MemTable.FieldByName('situacao_cadastral').AsString;
-            Qry.ParamByName('logradouro').AsString          := MemTable.FieldByName('logradouro').AsString;
-            Qry.ParamByName('numero').AsString              := MemTable.FieldByName('numero').AsString;
-            Qry.ParamByName('bairro').AsString              := MemTable.FieldByName('bairro').AsString;
-            Qry.ParamByName('municipio').AsString           := MemTable.FieldByName('municipio').AsString;
-            Qry.ParamByName('uf').AsString                  := MemTable.FieldByName('uf').AsString;
-            Qry.ParamByName('codigo').AsString              := MemTable.FieldByName('atividade_codigo').AsString;
-            Qry.ParamByName('descricao').AsString           := MemTable.FieldByName('atividade_descricao').AsString;
-            Qry.ParamByName('cnpj_mei').AsBoolean           := MemTable.FieldByName('cnpj_mei').AsBoolean;
-            Qry.ParamByName('versao').AsString              := MemTable.FieldByName('versao').AsString;
-
-            Qry.ExecSQL;
-            MemTable.Next;
-          finally
-            Qry.Free;
-            Connection.Commit;
-          end;
-
+      //Ideal Ler de um arquivo Ini para não ficar enjessado
+      Connection.DriverName := 'MySQL'; // Driver do FireDAC para MySQL
+      IniFile := TIniFile.Create(ExtractFilePath(Application.ExeName) +'\config.ini');
+      try
+        Connection.Params.Values['Server']    := IniFile.ReadString('MySQLConfig', 'Server', '');
+        Connection.Params.Values['User_Name'] := IniFile.ReadString('MySQLConfig', 'User_Name', '');
+        Connection.Params.Values['Password']  := IniFile.ReadString('MySQLConfig', 'Password', '');
+        Connection.Params.Values['Database']  := IniFile.ReadString('MySQLConfig', 'Database', '');
+        Connection.Params.Values['Port']      := IniFile.ReadString('MySQLConfig', 'Port', '');
+      finally
+        IniFile.Free;
       end;
-    Except  on E: Exception do
-      begin
-         Connection.Rollback;
-         ShowMessage('Erro durante a transação: ' + E.Message);
-      end;
-    end;
 
+      Connection.Connected := True;
+
+      //Showmessage(IntToStr(MemTable.RecordCount));
+
+      //Inicia a Transação com o banco
+      try
+        Connection.StartTransaction;
+
+        MemTable.First;
+        while not MemTable.Eof do
+        begin
+            Qry:= TFDQuery.Create(nil);
+            Qry.Connection:= Connection;
+            try
+              Qry.SQL.Clear;
+              Qry.SQL.Add('INSERT INTO clientes (' +
+                          'cnpj, cnpj_raiz, filial_numero, razao_social, nome_fantasia, ' +
+                          'data_abertura, situacao_cadastral, logradouro, numero, bairro, ' +
+                          'municipio, uf, codigo, descricao, cnpj_mei, versao) ' +
+                          'VALUES (:cnpj, :cnpj_raiz, :filial_numero, :razao_social, :nome_fantasia, ' +
+                          ':data_abertura, :situacao_cadastral, :logradouro, :numero, :bairro, ' +
+                          ':municipio, :uf, :codigo, :descricao, :cnpj_mei, :versao)');
+
+              Qry.ParamByName('cnpj').AsString                := MemTable.FieldByName('cnpj').AsString;
+              Qry.ParamByName('cnpj_raiz').AsString           := MemTable.FieldByName('cnpj_raiz').AsString;
+              Qry.ParamByName('filial_numero').AsInteger      := MemTable.FieldByName('filial_numero').AsInteger;
+              Qry.ParamByName('razao_social').AsString        := MemTable.FieldByName('razao_social').AsString;
+              Qry.ParamByName('nome_fantasia').AsString       := MemTable.FieldByName('nome_fantasia').AsString;
+              Qry.ParamByName('data_abertura').AsString       := MemTable.FieldByName('data_abertura').AsString;
+              Qry.ParamByName('situacao_cadastral').AsString  := MemTable.FieldByName('situacao_cadastral').AsString;
+              Qry.ParamByName('logradouro').AsString          := MemTable.FieldByName('logradouro').AsString;
+              Qry.ParamByName('numero').AsString              := MemTable.FieldByName('numero').AsString;
+              Qry.ParamByName('bairro').AsString              := MemTable.FieldByName('bairro').AsString;
+              Qry.ParamByName('municipio').AsString           := MemTable.FieldByName('municipio').AsString;
+              Qry.ParamByName('uf').AsString                  := MemTable.FieldByName('uf').AsString;
+              Qry.ParamByName('codigo').AsString              := MemTable.FieldByName('atividade_codigo').AsString;
+              Qry.ParamByName('descricao').AsString           := MemTable.FieldByName('atividade_descricao').AsString;
+              Qry.ParamByName('cnpj_mei').AsBoolean           := MemTable.FieldByName('cnpj_mei').AsBoolean;
+              Qry.ParamByName('versao').AsString              := MemTable.FieldByName('versao').AsString;
+
+              Qry.ExecSQL;
+              MemTable.Next;
+            finally
+              Qry.Free;
+              Connection.Commit;
+              Connection.Connected := False;
+            end;
+
+        end;
+      Except  on E: Exception do
+        begin
+           Connection.Rollback;
+           ShowMessage('Erro durante a transação: ' + E.Message);
+        end;
+      end;
+
+    end
+    else
+    begin
+      ShowMessage('Dados não gravados.');
+    end;
   end;
-
 end;
 
 function TForm1.FormatarJSON(const ADados: string): string;

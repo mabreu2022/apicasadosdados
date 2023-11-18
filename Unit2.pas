@@ -17,6 +17,7 @@ TMyConst = class
    class procedure AtualizarMunicipio(const novoMunicipio: string);
    class procedure AtualizarBairro(const novoBairro: string);
    class procedure AtualizarCEP(const novoCEP: string);
+   class procedure AtualizarPagina(const novaPagina: string);
 
 end;
 
@@ -87,6 +88,13 @@ class procedure TMyConst.AtualizarMunicipio(const novoMunicipio: string);
 begin
   // Substituir os valores no JSON
   JSON := StringReplace(JSON, '"municipio": ["SAO JOSE DOS CAMPOS"]', '"municipio": ["' + novoMunicipio + '"]', []);
+end;
+
+class procedure TMyConst.AtualizarPagina(const novaPagina: string);
+begin
+  // Substituir os valores no JSON para a Page
+  FJSON := StringReplace(FJSON, '"page": 1', '"page": ' + novaPagina, [rfIgnoreCase]);
+  FJSON := StringReplace(FJSON, '"page": "1"', '"page": "' + novaPagina + '"', [rfIgnoreCase]);
 end;
 
 class procedure TMyConst.AtualizarUF(const novaUF: string);

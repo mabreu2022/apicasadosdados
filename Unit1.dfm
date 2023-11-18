@@ -21,8 +21,8 @@ object Form1: TForm1
     Align = alClient
     Caption = 'Par'#226'metros'
     TabOrder = 2
-    ExplicitWidth = 1132
-    ExplicitHeight = 185
+    ExplicitWidth = 1130
+    ExplicitHeight = 177
     object Lbl_Estado: TLabel
       Left = 448
       Top = 16
@@ -162,6 +162,13 @@ object Form1: TForm1
       Width = 147
       Height = 15
       Caption = 'Incluir Atividade Secund'#225'ria'
+    end
+    object Label8: TLabel
+      Left = 570
+      Top = 64
+      Width = 36
+      Height = 15
+      Caption = 'P'#225'gina'
     end
     object EditCEP: TEdit
       Left = 835
@@ -319,6 +326,14 @@ object Form1: TForm1
       Height = 20
       TabOrder = 19
     end
+    object EdtPagina: TEdit
+      Left = 570
+      Top = 80
+      Width = 121
+      Height = 23
+      TabOrder = 20
+      TextHint = 'Numero da P'#225'gina'
+    end
   end
   object DBGrid1: TDBGrid
     Left = 0
@@ -342,6 +357,7 @@ object Form1: TForm1
     Align = alTop
     ScrollBars = ssBoth
     TabOrder = 1
+    ExplicitWidth = 1130
   end
   object Panel1: TPanel
     Left = 0
@@ -350,8 +366,8 @@ object Form1: TForm1
     Height = 41
     Align = alBottom
     TabOrder = 3
-    ExplicitTop = 426
-    ExplicitWidth = 1132
+    ExplicitTop = 418
+    ExplicitWidth = 1130
     object Button1: TButton
       AlignWithMargins = True
       Left = 1048
@@ -363,7 +379,7 @@ object Form1: TForm1
       Caption = 'Enviar'
       TabOrder = 0
       OnClick = Button1Click
-      ExplicitLeft = 1046
+      ExplicitLeft = 1044
     end
   end
   object FDMemTable1: TFDMemTable
