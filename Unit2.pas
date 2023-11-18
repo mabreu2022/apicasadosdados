@@ -91,10 +91,15 @@ begin
 end;
 
 class procedure TMyConst.AtualizarPagina(const novaPagina: string);
+var
+  ultimaPagina: integer;
 begin
+
+  UltimaPagina:= StrToInt(novaPagina)-1;
+  if UltimaPagina=0 then
+    UltimaPagina:=1;
   // Substituir os valores no JSON para a Page
-  FJSON := StringReplace(FJSON, '"page": 1', '"page": ' + novaPagina, [rfIgnoreCase]);
-  FJSON := StringReplace(FJSON, '"page": "1"', '"page": "' + novaPagina + '"', [rfIgnoreCase]);
+  FJSON := StringReplace(FJSON, '"page": "' + IntToStr(ultimaPagina) + '"', '"page": "' + novaPagina + '"', [rfIgnoreCase]);
 end;
 
 class procedure TMyConst.AtualizarUF(const novaUF: string);

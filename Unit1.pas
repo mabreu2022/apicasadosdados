@@ -96,6 +96,8 @@ type
     procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
+    JSONObject, DataObject: TJSONObject;
+    CNPJsArray: TJSONArray;
     procedure CarregarJSONParaFDMemTable(const JSONString: string; MemTable: TFDMemTable);
     function FormatarJSON(const ADados: string): string;
   public
@@ -117,6 +119,8 @@ var
   C        : integer;
   D        : Integer;
 begin
+
+   //Só Envia os parâmetros caso sejam modificados.
    if Trim(EditUF.Text)<>'' then
      TMyConst.AtualizarUF(EditUF.Text);
    if Trim(EditMunicipio.Text)<>'' then
@@ -133,6 +137,8 @@ begin
 
     for C := 1 to D do
     begin
+      //Limpa o memo do JSON a cada requisição enviada
+      Memo1.Clear;
 
       TMyConst.AtualizarPagina(IntToStr(C));
       LResponse :=
@@ -142,16 +148,25 @@ begin
          //.AddBody(FormatarJSON(Ljson))
          .Post;
 
+      //Preenche o memo com o retorno da API
       memo1.Lines.Add(FormatarJSON(LResponse.Content));
       memo1.Perform(WM_VSCROLL,SB_THUMBPOSITION,0);
+
       CarregarJSONParaFDMemTable(Memo1.Text, FDMemTable1);
 
+
+      //Se o status code for diferente de 200 OK sai do For
       if LResponse.StatusCode <> 200 then
       begin
         ShowMessage('Não existem mais dados para essa pesquisa');
         exit;
       end;
     end;
+
+    //Libera da memoria
+    JSONObject.Free;
+    DataObject.Free;
+    CNPJsArray.Free;
 
 end;
 
@@ -163,8 +178,7 @@ end;
 procedure TForm1.CarregarJSONParaFDMemTable(const JSONString: string;
   MemTable: TFDMemTable);
 var
-  JSONObject, DataObject: TJSONObject;
-  CNPJsArray: TJSONArray;
+
   CNPJObject: TJSONObject;
   AtivPrin : TJSONObject;
   I: Integer;
@@ -200,22 +214,22 @@ begin
   MemTable.CreateDataSet;
 
   // Converte a string JSON para um objeto JSON
-  JSONObject:=  TJSONObject.Create;
+  JSONObject:=  TJSONObject.Create(nil);
   JSONObject := TJSONObject.ParseJSONValue(JSONString) as TJSONObject;
   try
     // Obtém o objeto 'data' do JSON
-    DataObject:= TJSONObject.Create;
+    DataObject:= TJSONObject.Create(nil);
     DataObject := JSONObject.GetValue('data') as TJSONObject;
 
     // Obtém o array 'cnpj' do objeto 'data'
-    CNPJsArray:= TJSONArray.Create;
+    CNPJsArray:= TJSONArray.Create(nil);
     CNPJsArray := DataObject.GetValue('cnpj') as TJSONArray;
 
     // Itera sobre os objetos CNPJ no array
-    //for I := 0 to CNPJsArray.Count - 1 do
     for I := 0 to CNPJsArray.Size - 1 do
     begin
       // Obtém o objeto CNPJ
+      CNPJObject:= TJSONObject.Create(nil);
       CNPJObject := CNPJsArray.Items[I] as TJSONObject;
 
       // Adiciona os campos na FDMemTable e preenche os valores
