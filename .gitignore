@@ -49,6 +49,7 @@
 *.cfg
 *.hpp
 *Resource.rc
+Project1.rsm
 
 # Delphi local files (user-specific info)
 *.local
