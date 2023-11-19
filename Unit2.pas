@@ -140,11 +140,17 @@ var
   texto: string;
 begin
   texto := FJSON;
-  texto := StringReplace(texto, '%BAIRRO%', novoBairro, [rfReplaceAll]);  //campo obrigatório
-  texto := StringReplace(texto, '%UF%', novaUF, [rfReplaceAll]);         //campo obrigatório
-  texto := StringReplace(texto, '%MUNICIPIO%', novoMunicipio, [rfReplaceAll]); //campo obrigatório
+  if novoBairro <>'' then
+    texto := StringReplace(texto, '%BAIRRO%', novoBairro, [rfReplaceAll]);  //campo obrigatório
+  if novaUF <> '' then
+    texto := StringReplace(texto, '%UF%', novaUF, [rfReplaceAll]);         //campo obrigatório
+  if novoMunicipio<>'' then
+    texto := StringReplace(texto, '%MUNICIPIO%', novoMunicipio, [rfReplaceAll]); //campo obrigatório
+
   texto := StringReplace(texto, '%CEP%', novoCEP, [rfReplaceAll]);
   texto := StringReplace(texto, '%PAGINA%', novaPagina, [rfReplaceAll]);
+
+  //Switchs
   texto  := StringReplace(texto, '%SOMENTEMEI%', somenteMei, [rfReplaceAll]);
   texto  := StringReplace(texto, '%EXCLUIRMEI%', excluirMei, [rfReplaceAll]);
   texto  := StringReplace(texto, '%COMCONTATOTELEFONE%', comcontatotelefone, [rfReplaceAll]);

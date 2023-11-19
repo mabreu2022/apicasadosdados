@@ -144,6 +144,8 @@ var
   LS_IncluirAtividadeSecundaria: string;
 begin
    try
+      //validações
+
 
       D:= StrToInt(EdtPagina.Text);
 
