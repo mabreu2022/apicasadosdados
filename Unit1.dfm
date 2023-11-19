@@ -1,6 +1,8 @@
 object Form1: TForm1
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
   Caption = 'Pesquisa Casa dos Dados'
   ClientHeight = 678
   ClientWidth = 1134
@@ -316,7 +318,7 @@ object Form1: TForm1
       Width = 121
       Height = 23
       TabOrder = 18
-      Text = '1'
+      Text = '100'
       TextHint = 'Numero da P'#225'gina'
     end
     object GroupBox2: TGroupBox

@@ -102,7 +102,6 @@ type
     cbUF: TComboBox;
     cbMunicipios: TComboBox;
     procedure FormCreate(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure cbUFChange(Sender: TObject);
   private
@@ -257,17 +256,13 @@ begin
         end;
       end;
       Showmessage('Pesquisa Finalizada');
+
    Except  on E: Exception do
         begin
             ShowMessage('Erro : ' + E.Message);
         end;
    end;
 
-end;
-
-procedure TForm1.Button2Click(Sender: TObject);
-begin
-  FDMemTable1.LoadFromJSON(Memo1.Text);
 end;
 
 procedure TForm1.CarregarJSONParaFDMemTable(const JSONString: string;

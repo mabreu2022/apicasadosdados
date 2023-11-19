@@ -10,10 +10,12 @@ type
 TMyConst = class
   private
     class var FJSON: string;
+    class var FJSON2: string;
     class var FJSONENVIO: string;
   public
    class constructor Create;
    class property JSON: string read FJSON write FJSON;
+   class property JSON2: string read FJSON2 write FJSON2;
    class property JSONENVIO: string read FJSONENVIO write FJSONENVIO;
    class procedure AtualizarUF(const novaUF: string);
    class procedure AtualizarMunicipio(const novoMunicipio: string);
@@ -86,6 +88,49 @@ begin
   '"page": %PAGINA% '+
   '}';
 
+  FJSON2 :=  '{'+
+  '"query": {'+
+  '"termo": [],'+
+  '"atividade_principal": [],'+
+  '"natureza_juridica": [],'+
+  '"uf": ['+
+  ''+
+  '],'+
+  '"municipio": ['+
+  ''+
+  '],'+
+  '"bairro": ['+
+  ''+
+  '],'+
+  '"situacao_cadastral": "ATIVA",'+
+  '"cep": ["%CEP%"],'+
+  '"ddd": []'+
+  '},'+
+  '"range_query": {'+
+  '"data_abertura": {'+
+  '"lte": null,'+
+  '"gte": null'+
+  '},'+
+  '"capital_social": {'+
+  '"lte": null,'+
+  '"gte": null'+
+  '}'+
+  '},'+
+  '"extras": {'+
+  '"somente_mei": %SOMENTEMEI%,'+
+  '"excluir_mei": %EXCLUIRMEI%,'+
+  '"com_email": %COMEMAIL%,'+
+  '"incluir_atividade_secundaria": %INCLUIRATIVIDADESECUNDARIA%,'+
+  '"com_contato_telefonico": %COMCONTATOTELEFONE%,'+
+  '"somente_fixo": %SOMENTEFIXO%,'+
+  '"somente_celular": %SOMENTECELULAR%,'+
+  '"somente_matriz": %SOMENTEMATRIZ%,'+
+  '"somente_filial": %SOMENTEFILIAL%'+
+  '},'+
+  '"page": %PAGINA% '+
+  '}';
+
+
    FJSONENVIO := FJSON;
 
   inherited;
@@ -139,29 +184,56 @@ class procedure TMyConst.AtualizaTudo(const novaUF: string;
 var
   texto: string;
 begin
-  texto := FJSON;
-  if novoBairro <>'' then
+
+  if (novoBairro = '') and (novaUF = '') and (novoMunicipio ='') then
+  begin
+    texto := FJSON2;
+    texto := StringReplace(texto, '%CEP%', novoCEP, [rfReplaceAll]);
+    texto := StringReplace(texto, '%PAGINA%', novaPagina, [rfReplaceAll]);
     texto := StringReplace(texto, '%BAIRRO%', novoBairro, [rfReplaceAll]);  //campo obrigatório
-  if novaUF <> '' then
     texto := StringReplace(texto, '%UF%', novaUF, [rfReplaceAll]);         //campo obrigatório
-  if novoMunicipio<>'' then
     texto := StringReplace(texto, '%MUNICIPIO%', novoMunicipio, [rfReplaceAll]); //campo obrigatório
 
-  texto := StringReplace(texto, '%CEP%', novoCEP, [rfReplaceAll]);
-  texto := StringReplace(texto, '%PAGINA%', novaPagina, [rfReplaceAll]);
+    texto := StringReplace(texto, '%CEP%', novoCEP, [rfReplaceAll]);
+    texto := StringReplace(texto, '%PAGINA%', novaPagina, [rfReplaceAll]);
 
-  //Switchs
-  texto  := StringReplace(texto, '%SOMENTEMEI%', somenteMei, [rfReplaceAll]);
-  texto  := StringReplace(texto, '%EXCLUIRMEI%', excluirMei, [rfReplaceAll]);
-  texto  := StringReplace(texto, '%COMCONTATOTELEFONE%', comcontatotelefone, [rfReplaceAll]);
-  texto := StringReplace(texto, '%SOMENTEFIXO%', somentefixo, [rfReplaceAll]); //campo obrigatório
-  texto := StringReplace(texto, '%SOMENTEMATRIZ%', somentematriz, [rfReplaceAll]);
-  texto := StringReplace(texto, '%SOMENTEFILIAL%', somentefilial, [rfReplaceAll]);
-  texto  := StringReplace(texto, '%SOMENTECELULAR%', somentecelular, [rfReplaceAll]);
-  texto  := StringReplace(texto, '%COMEMAIL%', comemail, [rfReplaceAll]);
-  texto  := StringReplace(texto, '%INCLUIRATIVIDADESECUNDARIA%', incluiratividadesecundaria, [rfReplaceAll]);
+    //Switchs
+    texto  := StringReplace(texto, '%SOMENTEMEI%', somenteMei, [rfReplaceAll]);
+    texto  := StringReplace(texto, '%EXCLUIRMEI%', excluirMei, [rfReplaceAll]);
+    texto  := StringReplace(texto, '%COMCONTATOTELEFONE%', comcontatotelefone, [rfReplaceAll]);
+    texto := StringReplace(texto, '%SOMENTEFIXO%', somentefixo, [rfReplaceAll]); //campo obrigatório
+    texto := StringReplace(texto, '%SOMENTEMATRIZ%', somentematriz, [rfReplaceAll]);
+    texto := StringReplace(texto, '%SOMENTEFILIAL%', somentefilial, [rfReplaceAll]);
+    texto  := StringReplace(texto, '%SOMENTECELULAR%', somentecelular, [rfReplaceAll]);
+    texto  := StringReplace(texto, '%COMEMAIL%', comemail, [rfReplaceAll]);
+    texto  := StringReplace(texto, '%INCLUIRATIVIDADESECUNDARIA%', incluiratividadesecundaria, [rfReplaceAll]);
 
-  JSONENVIO := texto;
+    JSONENVIO := texto;
+  end
+  else
+  begin
+    texto := FJSON;
+    texto := StringReplace(texto, '%BAIRRO%', novoBairro, [rfReplaceAll]);  //campo obrigatório
+    texto := StringReplace(texto, '%UF%', novaUF, [rfReplaceAll]);         //campo obrigatório
+    texto := StringReplace(texto, '%MUNICIPIO%', novoMunicipio, [rfReplaceAll]); //campo obrigatório
+
+    texto := StringReplace(texto, '%CEP%', novoCEP, [rfReplaceAll]);
+    texto := StringReplace(texto, '%PAGINA%', novaPagina, [rfReplaceAll]);
+
+    //Switchs
+    texto  := StringReplace(texto, '%SOMENTEMEI%', somenteMei, [rfReplaceAll]);
+    texto  := StringReplace(texto, '%EXCLUIRMEI%', excluirMei, [rfReplaceAll]);
+    texto  := StringReplace(texto, '%COMCONTATOTELEFONE%', comcontatotelefone, [rfReplaceAll]);
+    texto := StringReplace(texto, '%SOMENTEFIXO%', somentefixo, [rfReplaceAll]); //campo obrigatório
+    texto := StringReplace(texto, '%SOMENTEMATRIZ%', somentematriz, [rfReplaceAll]);
+    texto := StringReplace(texto, '%SOMENTEFILIAL%', somentefilial, [rfReplaceAll]);
+    texto  := StringReplace(texto, '%SOMENTECELULAR%', somentecelular, [rfReplaceAll]);
+    texto  := StringReplace(texto, '%COMEMAIL%', comemail, [rfReplaceAll]);
+    texto  := StringReplace(texto, '%INCLUIRATIVIDADESECUNDARIA%', incluiratividadesecundaria, [rfReplaceAll]);
+
+    JSONENVIO := texto;
+  end;
+
 end;
 
 end.
