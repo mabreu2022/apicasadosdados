@@ -21,8 +21,6 @@ object Form1: TForm1
     Align = alClient
     Caption = 'Par'#226'metros'
     TabOrder = 2
-    ExplicitWidth = 1130
-    ExplicitHeight = 177
     object Lbl_Estado: TLabel
       Left = 448
       Top = 16
@@ -332,7 +330,85 @@ object Form1: TForm1
       Width = 121
       Height = 23
       TabOrder = 20
+      Text = '1'
       TextHint = 'Numero da P'#225'gina'
+    end
+    object GroupBox2: TGroupBox
+      Left = 1012
+      Top = 88
+      Width = 111
+      Height = 65
+      Caption = 'Pagina Corrente'
+      TabOrder = 21
+      object lblPagina: TLabel
+        Left = 2
+        Top = 17
+        Width = 107
+        Height = 46
+        Align = alClient
+        Alignment = taCenter
+        Caption = 'Pagina'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -27
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ExplicitLeft = 50
+        ExplicitTop = 40
+        ExplicitWidth = 87
+        ExplicitHeight = 37
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 904
+      Top = 88
+      Width = 89
+      Height = 65
+      Caption = 'Status Code'
+      TabOrder = 22
+      object lblStatusCode: TLabel
+        Left = 2
+        Top = 17
+        Width = 85
+        Height = 46
+        Align = alClient
+        Alignment = taCenter
+        Caption = '0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clGreen
+        Font.Height = -27
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ExplicitWidth = 16
+        ExplicitHeight = 37
+      end
+    end
+    object GroupBox4: TGroupBox
+      Left = 800
+      Top = 88
+      Width = 100
+      Height = 65
+      Caption = 'Registros'
+      TabOrder = 23
+      object lblRegistros: TLabel
+        Left = 2
+        Top = 17
+        Width = 96
+        Height = 46
+        Align = alClient
+        Alignment = taCenter
+        Caption = '0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -27
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ExplicitWidth = 16
+        ExplicitHeight = 37
+      end
     end
   end
   object DBGrid1: TDBGrid
@@ -357,7 +433,6 @@ object Form1: TForm1
     Align = alTop
     ScrollBars = ssBoth
     TabOrder = 1
-    ExplicitWidth = 1130
   end
   object Panel1: TPanel
     Left = 0
@@ -366,8 +441,6 @@ object Form1: TForm1
     Height = 41
     Align = alBottom
     TabOrder = 3
-    ExplicitTop = 418
-    ExplicitWidth = 1130
     object Button1: TButton
       AlignWithMargins = True
       Left = 1048
@@ -379,7 +452,6 @@ object Form1: TForm1
       Caption = 'Enviar'
       TabOrder = 0
       OnClick = Button1Click
-      ExplicitLeft = 1044
     end
   end
   object FDMemTable1: TFDMemTable

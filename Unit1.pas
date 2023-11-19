@@ -91,6 +91,12 @@ type
     Label20: TLabel;
     EdtPagina: TEdit;
     Label8: TLabel;
+    GroupBox2: TGroupBox;
+    lblPagina: TLabel;
+    GroupBox3: TGroupBox;
+    lblStatusCode: TLabel;
+    GroupBox4: TGroupBox;
+    lblRegistros: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -119,54 +125,69 @@ var
   C        : integer;
   D        : Integer;
 begin
+   try
+     //Só Envia os parâmetros caso sejam modificados.
+     if Trim(EditUF.Text)<>'' then
+       TMyConst.AtualizarUF(EditUF.Text);
+     if Trim(EditMunicipio.Text)<>'' then
+       TMyConst.AtualizarMunicipio(EditMunicipio.Text);
+     if Trim(EditBairro.Text)<>'' then
+       TMyConst.AtualizarBairro(EditBairro.Text);
+     if Trim(EditCEP.Text)<>'' then
+       TMyConst.AtualizarCEP(EditCEP.Text);
 
-   //Só Envia os parâmetros caso sejam modificados.
-   if Trim(EditUF.Text)<>'' then
-     TMyConst.AtualizarUF(EditUF.Text);
-   if Trim(EditMunicipio.Text)<>'' then
-     TMyConst.AtualizarMunicipio(EditMunicipio.Text);
-   if Trim(EditBairro.Text)<>'' then
-     TMyConst.AtualizarBairro(EditBairro.Text);
-   if Trim(EditCEP.Text)<>'' then
-     TMyConst.AtualizarCEP(EditCEP.Text);
+      D:= StrToInt(EdtPagina.Text);
 
-
-    Ljson:= TMyConst.JSON;
-
-    D:= StrToInt(EdtPagina.Text);
-
-    for C := 1 to D do
-    begin
-      //Limpa o memo do JSON a cada requisição enviada
-      Memo1.Clear;
-
-      TMyConst.AtualizarPagina(IntToStr(C));
-      LResponse :=
-         TRequest.New.BaseURL('https://api.casadosdados.com.br/v2/public/cnpj/search')
-         .Accept('application/json')
-         .AddBody(Ljson)
-         //.AddBody(FormatarJSON(Ljson))
-         .Post;
-
-      //Preenche o memo com o retorno da API
-      memo1.Lines.Add(FormatarJSON(LResponse.Content));
-      memo1.Perform(WM_VSCROLL,SB_THUMBPOSITION,0);
-
-      CarregarJSONParaFDMemTable(Memo1.Text, FDMemTable1);
-
-
-      //Se o status code for diferente de 200 OK sai do For
-      if LResponse.StatusCode <> 200 then
+      for C := 1 to D do
       begin
-        ShowMessage('Não existem mais dados para essa pesquisa');
-        exit;
-      end;
-    end;
+        //Limpa o memo do JSON a cada requisição enviada
+        Memo1.Clear;
 
-    //Libera da memoria
-    JSONObject.Free;
-    DataObject.Free;
-    CNPJsArray.Free;
+        TMyConst.AtualizarPagina(IntToStr(C));
+        Ljson:= TMyConst.JSONENVIO;
+
+        lblStatusCode.Caption:= '0';
+
+        LResponse :=
+           TRequest.New.BaseURL('https://api.casadosdados.com.br/v2/public/cnpj/search')
+           .Accept('application/json')
+           .AddBody(FormatarJSON(Ljson))
+           .Post;
+
+        //Mostra na tela o número da página
+        lblPagina.Caption:= IntToStr(C);
+
+
+        if LResponse.StatusCode = 200 then
+        begin
+          //Mostra o Status Code na Tela.
+          lblStatusCode.Font.Color:= ClGreen;
+          lblStatusCode.Caption:= IntToStr(LResponse.StatusCode);
+
+          //Preenche o memo com o retorno da API
+          memo1.Lines.Add(FormatarJSON(LResponse.Content));
+          memo1.Perform(WM_VSCROLL,SB_THUMBPOSITION,0);
+
+          CarregarJSONParaFDMemTable(Memo1.Text, FDMemTable1);
+
+        end
+        else
+        //Se o status code for diferente de 200 OK sai do For
+        if LResponse.StatusCode <> 200 then
+        begin
+           //Mostra o Status Code na Tela.
+          lblStatusCode.Font.Color:= ClRed;
+          lblStatusCode.Caption:= IntToStr(LResponse.StatusCode);
+
+          ShowMessage('Não existem mais dados para essa pesquisa');
+          exit;
+        end;
+      end;
+   Except  on E: Exception do
+        begin
+            ShowMessage('Erro durante a transação: ' + E.Message);
+        end;
+   end;
 
 end;
 
@@ -187,6 +208,8 @@ var
   IniFile: TIniFile;
   RespostaUsuario: Integer;
 begin
+
+
   // Limpa os dados existentes na FDMemTable
   MemTable.Close;
   MemTable.FieldDefs.Clear;
@@ -225,9 +248,11 @@ begin
     CNPJsArray:= TJSONArray.Create(nil);
     CNPJsArray := DataObject.GetValue('cnpj') as TJSONArray;
 
-    // Itera sobre os objetos CNPJ no array
     for I := 0 to CNPJsArray.Size - 1 do
     begin
+      //Zera os registros na Tela.
+      lblRegistros.caption:='0';
+
       // Obtém o objeto CNPJ
       CNPJObject:= TJSONObject.Create(nil);
       CNPJObject := CNPJsArray.Items[I] as TJSONObject;
@@ -260,9 +285,10 @@ begin
     end;
   finally
     // Libera o objeto JSON
-    //JSONObject.Free;
-    //DataObject.Free;
-    //CNPJsArray.Free;
+    JSONObject.Free;
+
+     //Mostra a quantidade de registros da Pagina de dados na tela
+     lblRegistros.caption:= IntToStr(MemTable.RecordCount);
 
     //Gravar no Banco de dados
     RespostaUsuario := MessageDlg('Deseja gravar os dados?', mtConfirmation, mbYesNo, 0);
@@ -286,8 +312,6 @@ begin
 
       Connection.Connected := True;
 
-      //Showmessage(IntToStr(MemTable.RecordCount));
-
       //Inicia a Transação com o banco
       try
         Connection.StartTransaction;
@@ -298,6 +322,12 @@ begin
             Qry:= TFDQuery.Create(nil);
             Qry.Connection:= Connection;
             try
+              Qry.SQL.Clear;
+
+              //Limpar Tabela
+              Qry.SQL.Add('DELETE FROM CLIENTES');
+              QRY.ExecSQL;
+
               Qry.SQL.Clear;
               Qry.SQL.Add('INSERT INTO clientes (' +
                           'cnpj, cnpj_raiz, filial_numero, razao_social, nome_fantasia, ' +

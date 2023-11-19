@@ -10,9 +10,11 @@ type
 TMyConst = class
   private
     class var FJSON: string;
+    class var FJSONENVIO: string;
   public
    class constructor Create;
    class property JSON: string read FJSON write FJSON;
+   class property JSONENVIO: string read FJSONENVIO write FJSONENVIO;
    class procedure AtualizarUF(const novaUF: string);
    class procedure AtualizarMunicipio(const novoMunicipio: string);
    class procedure AtualizarBairro(const novoBairro: string);
@@ -22,6 +24,8 @@ TMyConst = class
 end;
 
 implementation
+
+uses Unit1;
 
 { TMyConst }
 
@@ -66,8 +70,10 @@ begin
   '"somente_matriz": false,'+
   '"somente_filial": false'+
   '},'+
-  '"page": 1'+
+  '"page": %PAGINA% '+
   '}';
+
+   FJSONENVIO := FJSON;
 
   inherited;
 end;
@@ -75,7 +81,7 @@ end;
 class procedure TMyConst.AtualizarBairro(const novoBairro: string);
 begin
   // Substituir os valores no JSON
-  JSON := StringReplace(JSON, '"bairro": ["Jardim Aquarius"]', '"bairro": ["' + novoBairro + '"]', []);
+  FJSON := StringReplace(FJSON, '"bairro": ["Jardim Aquarius"]', '"bairro": ["' + novoBairro + '"]', []);
 end;
 
 class procedure TMyConst.AtualizarCEP(const novoCEP: string);
@@ -87,25 +93,20 @@ end;
 class procedure TMyConst.AtualizarMunicipio(const novoMunicipio: string);
 begin
   // Substituir os valores no JSON
-  JSON := StringReplace(JSON, '"municipio": ["SAO JOSE DOS CAMPOS"]', '"municipio": ["' + novoMunicipio + '"]', []);
+  FJSON := StringReplace(FJSON, '"municipio": ["SAO JOSE DOS CAMPOS"]', '"municipio": ["' + novoMunicipio + '"]', []);
 end;
 
 class procedure TMyConst.AtualizarPagina(const novaPagina: string);
-var
-  ultimaPagina: integer;
 begin
-
-  UltimaPagina:= StrToInt(novaPagina)-1;
-  if UltimaPagina=0 then
-    UltimaPagina:=1;
   // Substituir os valores no JSON para a Page
-  FJSON := StringReplace(FJSON, '"page": "' + IntToStr(ultimaPagina) + '"', '"page": "' + novaPagina + '"', [rfIgnoreCase]);
+
+  JSONENVIO := StringReplace(FJSON, '%PAGINA%', novaPagina, [rfReplaceAll]);
 end;
 
 class procedure TMyConst.AtualizarUF(const novaUF: string);
 begin
   // Substituir os valores no JSON
-  JSON := StringReplace(JSON, '"uf": ["SP"]', '"uf": ["' + novaUF + '"]', []);
+  FJSON := StringReplace(FJSON, '"uf": ["SP"]', '"uf": ["' + novaUF + '"]', []);
 end;
 
 end.
