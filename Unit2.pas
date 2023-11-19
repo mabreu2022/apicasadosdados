@@ -21,10 +21,19 @@ TMyConst = class
    class procedure AtualizarCEP(const novoCEP: string);
    class procedure AtualizarPagina(const novaPagina: string);
    class procedure AtualizaTudo(const novaUF: string;
-                                const novoMunicipio : string;
-                                const novoBairro: string;
-                                const novoCEP: string;
-                                const novaPagina: string);
+                                      const novoMunicipio : string;
+                                      const novoBairro: string;
+                                      const novoCEP: string;
+                                      const novaPagina: string;
+                                      const somenteMei: string;
+                                      const excluirMei: string;
+                                      const comcontatotelefone: string;
+                                      const somentefixo: string;
+                                      const somentematriz:string;
+                                      const somentefilial:string;
+                                      const somentecelular:string;
+                                      const comemail: string;
+                                      const incluiratividadesecundaria:string);
    end;
 
 implementation
@@ -64,15 +73,15 @@ begin
   '}'+
   '},'+
   '"extras": {'+
-  '"somente_mei": false,'+
-  '"excluir_mei": false,'+
-  '"com_email": false,'+
-  '"incluir_atividade_secundaria": false,'+
-  '"com_contato_telefonico": false,'+
-  '"somente_fixo": false,'+
-  '"somente_celular": false,'+
-  '"somente_matriz": false,'+
-  '"somente_filial": false'+
+  '"somente_mei": %SOMENTEMEI%,'+
+  '"excluir_mei": %EXCLUIRMEI%,'+
+  '"com_email": %COMEMAIL%,'+
+  '"incluir_atividade_secundaria": %INCLUIRATIVIDADESECUNDARIA%,'+
+  '"com_contato_telefonico": %COMCONTATOTELEFONE%,'+
+  '"somente_fixo": %SOMENTEFIXO%,'+
+  '"somente_celular": %SOMENTECELULAR%,'+
+  '"somente_matriz": %SOMENTEMATRIZ%,'+
+  '"somente_filial": %SOMENTEFILIAL%'+
   '},'+
   '"page": %PAGINA% '+
   '}';
@@ -114,19 +123,38 @@ begin
 end;
 
 class procedure TMyConst.AtualizaTudo(const novaUF: string;
-                                const novoMunicipio : string;
-                                const novoBairro: string;
-                                const novoCEP: string;
-                                const novaPagina: string);
+                                      const novoMunicipio : string;
+                                      const novoBairro: string;
+                                      const novoCEP: string;
+                                      const novaPagina: string;
+                                      const somenteMei: string;
+                                      const excluirMei: string;
+                                      const comcontatotelefone: string;
+                                      const somentefixo: string;
+                                      const somentematriz:string;
+                                      const somentefilial:string;
+                                      const somentecelular:string;
+                                      const comemail: string;
+                                      const incluiratividadesecundaria:string);
 var
   texto: string;
 begin
   texto := FJSON;
-  texto := StringReplace(texto, '%BAIRRO%', novoBairro, [rfReplaceAll]);
-  texto := StringReplace(texto, '%UF%', novaUF, [rfReplaceAll]);
-  texto := StringReplace(texto, '%MUNICIPIO%', novoMunicipio, [rfReplaceAll]);
+  texto := StringReplace(texto, '%BAIRRO%', novoBairro, [rfReplaceAll]);  //campo obrigatório
+  texto := StringReplace(texto, '%UF%', novaUF, [rfReplaceAll]);         //campo obrigatório
+  texto := StringReplace(texto, '%MUNICIPIO%', novoMunicipio, [rfReplaceAll]); //campo obrigatório
   texto := StringReplace(texto, '%CEP%', novoCEP, [rfReplaceAll]);
   texto := StringReplace(texto, '%PAGINA%', novaPagina, [rfReplaceAll]);
+  texto  := StringReplace(texto, '%SOMENTEMEI%', somenteMei, [rfReplaceAll]);
+  texto  := StringReplace(texto, '%EXCLUIRMEI%', excluirMei, [rfReplaceAll]);
+  texto  := StringReplace(texto, '%COMCONTATOTELEFONE%', comcontatotelefone, [rfReplaceAll]);
+  texto := StringReplace(texto, '%SOMENTEFIXO%', somentefixo, [rfReplaceAll]); //campo obrigatório
+  texto := StringReplace(texto, '%SOMENTEMATRIZ%', somentematriz, [rfReplaceAll]);
+  texto := StringReplace(texto, '%SOMENTEFILIAL%', somentefilial, [rfReplaceAll]);
+  texto  := StringReplace(texto, '%SOMENTECELULAR%', somentecelular, [rfReplaceAll]);
+  texto  := StringReplace(texto, '%COMEMAIL%', comemail, [rfReplaceAll]);
+  texto  := StringReplace(texto, '%INCLUIRATIVIDADESECUNDARIA%', incluiratividadesecundaria, [rfReplaceAll]);
+
   JSONENVIO := texto;
 end;
 

@@ -73,14 +73,14 @@ type
     Label9: TLabel;
     Label10: TLabel;
     Label11: TLabel;
-    ToggleSwitch1: TToggleSwitch;
-    ToggleSwitch2: TToggleSwitch;
-    ToggleSwitch3: TToggleSwitch;
-    ToggleSwitch4: TToggleSwitch;
-    ToggleSwitch5: TToggleSwitch;
-    ToggleSwitch6: TToggleSwitch;
-    ToggleSwitch7: TToggleSwitch;
-    ToggleSwitch8: TToggleSwitch;
+    TSSomenteMei: TToggleSwitch;
+    TSExcluiMei: TToggleSwitch;
+    TSComContatoTelefone: TToggleSwitch;
+    TSSomenteFixo: TToggleSwitch;
+    TSSomenteMatriz: TToggleSwitch;
+    TSSomenteFilial: TToggleSwitch;
+    TSSomenteCelular: TToggleSwitch;
+    TSComEmail: TToggleSwitch;
     Label12: TLabel;
     Label13: TLabel;
     Label14: TLabel;
@@ -89,7 +89,7 @@ type
     Label17: TLabel;
     Label18: TLabel;
     Label19: TLabel;
-    ToggleSwitch9: TToggleSwitch;
+    TSIncluirAtividadeSecundaria: TToggleSwitch;
     Label20: TLabel;
     EdtPagina: TEdit;
     Label8: TLabel;
@@ -133,6 +133,15 @@ var
   LJson    : string;
   C        : integer;
   D        : Integer;
+  LS_SomenteMei: string;
+  LS_ExcluiMei: string;
+  LS_ComContatoTelefone: string;
+  LS_SomenteFixo: string;
+  LS_SomenteMatriz: string;
+  LS_SomenteFilial: string;
+  LS_SomenteCelular: string;
+  LS_ComEmail: string;
+  LS_IncluirAtividadeSecundaria: string;
 begin
    try
 
@@ -143,8 +152,68 @@ begin
         //Limpa o memo do JSON a cada requisição enviada
         Memo1.Clear;
 
-        //TMyConst.AtualizarPagina(IntToStr(C));
-         TMyConst.AtualizaTudo(cbUF.Items[cbUF.ItemIndex],cbMunicipios.Items[cbMunicipios.ItemIndex],EditBairro.Text,EditCEP.Text,IntToStr(C));
+        //Ler os Switchs
+         if TSSomenteMei.State = tssOff then
+           LS_SomenteMei:='false'
+         else
+           LS_SomenteMei:= 'true';
+
+         if TSExcluiMei.State = tssOff then
+           LS_ExcluiMei:= 'false'
+         else
+           LS_ExcluiMei:= 'true';
+
+         if TSComContatoTelefone.State = tssOff then
+           LS_ComContatoTelefone:='false'
+         else
+           LS_ComContatoTelefone:='true';
+
+         if TSSomenteFixo.State = tssOff then
+           LS_SomenteFixo := 'false'
+         else
+           LS_SomenteFixo := 'true';
+
+         if TSSomenteMatriz.State = tssOff then
+           LS_SomenteMatriz := 'false'
+         else
+           LS_SomenteMatriz := 'true';
+
+         if TSSomenteFilial.State = tssOff then
+           LS_SomenteFilial := 'false'
+         else
+           LS_SomenteFilial := 'true';
+
+         if TSSomenteCelular.State = tssOff then
+           LS_SomenteCelular := 'false'
+         else
+           LS_SomenteCelular := 'true';
+
+         if TSComEmail.State = tssOff then
+           LS_ComEmail := 'false'
+         else
+           LS_ComEmail := 'true';
+
+         if TSIncluirAtividadeSecundaria.State = tssOff then
+           LS_IncluirAtividadeSecundaria := 'false'
+         else
+           LS_IncluirAtividadeSecundaria := 'true';
+         //fim leitura dos Switchs
+
+        //setar os parâmetros da pesquisa
+        TMyConst.AtualizaTudo(cbUF.Items[cbUF.ItemIndex],                 //UF        1
+                              cbMunicipios.Items[cbMunicipios.ItemIndex], //Municipio 2
+                              EditBairro.Text,                            //Bairro    3
+                              EditCEP.Text,                               //CEP        4
+                              IntToStr(C),                                //Pagina      5
+                              LS_SomenteMei,                              //Somente Mei  6
+                              LS_ExcluiMei,                               //Exclui Mei    7
+                              LS_ComContatoTelefone,                      //Com Contato Telefone 8
+                              LS_SomenteFixo,                             //Somente Fixo         9
+                              LS_SomenteMatriz,                           //Somente Matriz       10
+                              LS_SomenteFilial,                           //Somente Filial       11
+                              LS_SomenteCelular,                          //Somente Celular      12
+                              LS_ComEmail,                                //Com E-mail           13
+                              LS_IncluirAtividadeSecundaria);             //Incluir Atividade Secundária 14
 
         Ljson:= TMyConst.JSONENVIO;
 

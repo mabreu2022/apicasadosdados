@@ -247,63 +247,63 @@ object Form1: TForm1
         'ATIVA'
         'INATIVA')
     end
-    object ToggleSwitch1: TToggleSwitch
+    object TSSomenteMei: TToggleSwitch
       Left = 16
       Top = 134
       Width = 73
       Height = 20
       TabOrder = 9
     end
-    object ToggleSwitch2: TToggleSwitch
+    object TSExcluiMei: TToggleSwitch
       Left = 110
       Top = 134
       Width = 73
       Height = 20
       TabOrder = 10
     end
-    object ToggleSwitch3: TToggleSwitch
+    object TSComContatoTelefone: TToggleSwitch
       Left = 216
       Top = 134
       Width = 73
       Height = 20
       TabOrder = 11
     end
-    object ToggleSwitch4: TToggleSwitch
+    object TSSomenteFixo: TToggleSwitch
       Left = 354
       Top = 134
       Width = 73
       Height = 20
       TabOrder = 12
     end
-    object ToggleSwitch5: TToggleSwitch
+    object TSSomenteMatriz: TToggleSwitch
       Left = 442
       Top = 134
       Width = 73
       Height = 20
       TabOrder = 13
     end
-    object ToggleSwitch6: TToggleSwitch
+    object TSSomenteFilial: TToggleSwitch
       Left = 530
       Top = 134
       Width = 73
       Height = 20
       TabOrder = 14
     end
-    object ToggleSwitch7: TToggleSwitch
+    object TSSomenteCelular: TToggleSwitch
       Left = 618
       Top = 134
       Width = 73
       Height = 20
       TabOrder = 15
     end
-    object ToggleSwitch8: TToggleSwitch
+    object TSComEmail: TToggleSwitch
       Left = 710
       Top = 134
       Width = 73
       Height = 20
       TabOrder = 16
     end
-    object ToggleSwitch9: TToggleSwitch
+    object TSIncluirAtividadeSecundaria: TToggleSwitch
       Left = 976
       Top = 37
       Width = 73
