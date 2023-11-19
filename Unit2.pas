@@ -20,8 +20,12 @@ TMyConst = class
    class procedure AtualizarBairro(const novoBairro: string);
    class procedure AtualizarCEP(const novoCEP: string);
    class procedure AtualizarPagina(const novaPagina: string);
-
-end;
+   class procedure AtualizaTudo(const novaUF: string;
+                                const novoMunicipio : string;
+                                const novoBairro: string;
+                                const novoCEP: string;
+                                const novaPagina: string);
+   end;
 
 implementation
 
@@ -37,16 +41,16 @@ begin
   '"atividade_principal": [],'+
   '"natureza_juridica": [],'+
   '"uf": ['+
-  '"SP"'+
+  '"%UF%"'+
   '],'+
   '"municipio": ['+
-  '"SAO JOSE DOS CAMPOS"'+
+  '"%MUNICIPIO%"'+
   '],'+
   '"bairro": ['+
-  '"Jardim Aquarius"'+
+  '"%BAIRRO%"'+
   '],'+
   '"situacao_cadastral": "ATIVA",'+
-  '"cep": [],'+
+  '"cep": ["%CEP%"],'+
   '"ddd": []'+
   '},'+
   '"range_query": {'+
@@ -81,32 +85,49 @@ end;
 class procedure TMyConst.AtualizarBairro(const novoBairro: string);
 begin
   // Substituir os valores no JSON
-  FJSON := StringReplace(FJSON, '"bairro": ["Jardim Aquarius"]', '"bairro": ["' + novoBairro + '"]', []);
+ // FJSON := StringReplace(FJSON, '"bairro": ["Jardim Aquarius"]', '"bairro": ["' + novoBairro + '"]', []);
+  JSONENVIO := StringReplace(FJSON, '%BAIRRO%', novoBairro, [rfReplaceAll]);
 end;
 
 class procedure TMyConst.AtualizarCEP(const novoCEP: string);
 begin
   // Substituir os valores no JSON para o CEP
-  FJSON := StringReplace(FJSON, '"cep": []', '"cep": ["' + novoCEP + '"]', []);
+  JSONENVIO := StringReplace(FJSON, '%CEP%', novoCEP, [rfReplaceAll]);
 end;
 
 class procedure TMyConst.AtualizarMunicipio(const novoMunicipio: string);
 begin
   // Substituir os valores no JSON
-  FJSON := StringReplace(FJSON, '"municipio": ["SAO JOSE DOS CAMPOS"]', '"municipio": ["' + novoMunicipio + '"]', []);
+  JSONENVIO := StringReplace(FJSON, '%MUNICIPIO%', novoMunicipio, [rfReplaceAll]);
 end;
 
 class procedure TMyConst.AtualizarPagina(const novaPagina: string);
 begin
   // Substituir os valores no JSON para a Page
-
   JSONENVIO := StringReplace(FJSON, '%PAGINA%', novaPagina, [rfReplaceAll]);
 end;
 
 class procedure TMyConst.AtualizarUF(const novaUF: string);
 begin
   // Substituir os valores no JSON
-  FJSON := StringReplace(FJSON, '"uf": ["SP"]', '"uf": ["' + novaUF + '"]', []);
+  JSONENVIO := StringReplace(FJSON, '%UF%', novaUF, [rfReplaceAll]);
+end;
+
+class procedure TMyConst.AtualizaTudo(const novaUF: string;
+                                const novoMunicipio : string;
+                                const novoBairro: string;
+                                const novoCEP: string;
+                                const novaPagina: string);
+var
+  texto: string;
+begin
+  texto := FJSON;
+  texto := StringReplace(texto, '%BAIRRO%', novoBairro, [rfReplaceAll]);
+  texto := StringReplace(texto, '%UF%', novaUF, [rfReplaceAll]);
+  texto := StringReplace(texto, '%MUNICIPIO%', novoMunicipio, [rfReplaceAll]);
+  texto := StringReplace(texto, '%CEP%', novoCEP, [rfReplaceAll]);
+  texto := StringReplace(texto, '%PAGINA%', novaPagina, [rfReplaceAll]);
+  JSONENVIO := texto;
 end;
 
 end.

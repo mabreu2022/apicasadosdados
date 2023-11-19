@@ -5,7 +5,8 @@ uses
   Unit1 in 'Unit1.pas' {Form1},
   Unit2 in 'Unit2.pas',
   Vcl.Themes,
-  Vcl.Styles;
+  Vcl.Styles,
+  Unit3 in 'Unit3.pas';
 
 {$R *.res}
 

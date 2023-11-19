@@ -21,30 +21,32 @@ object Form1: TForm1
     Align = alClient
     Caption = 'Par'#226'metros'
     TabOrder = 2
+    ExplicitWidth = 1130
+    ExplicitHeight = 177
     object Lbl_Estado: TLabel
       Left = 448
-      Top = 16
+      Top = 17
       Width = 17
       Height = 15
       Caption = ' UF'
     end
     object Label2: TLabel
-      Left = 578
-      Top = 16
+      Left = 551
+      Top = 17
       Width = 54
       Height = 15
       Caption = 'Municipio'
     end
     object Label3: TLabel
       Left = 707
-      Top = 19
+      Top = 17
       Width = 31
       Height = 15
       Caption = 'Bairro'
     end
     object Label4: TLabel
-      Left = 835
-      Top = 19
+      Left = 837
+      Top = 17
       Width = 21
       Height = 15
       Caption = 'CEP'
@@ -156,7 +158,7 @@ object Form1: TForm1
     end
     object Label20: TLabel
       Left = 976
-      Top = 19
+      Top = 17
       Width = 147
       Height = 15
       Caption = 'Incluir Atividade Secund'#225'ria'
@@ -173,7 +175,7 @@ object Form1: TForm1
       Top = 35
       Width = 121
       Height = 23
-      TabOrder = 3
+      TabOrder = 1
       TextHint = 'CEP'
     end
     object EditBairro: TEdit
@@ -181,31 +183,15 @@ object Form1: TForm1
       Top = 35
       Width = 121
       Height = 23
-      TabOrder = 2
-      TextHint = 'Bairro'
-    end
-    object EditMunicipio: TEdit
-      Left = 578
-      Top = 35
-      Width = 121
-      Height = 23
-      TabOrder = 1
-      TextHint = 'Munic'#237'pio'
-    end
-    object EditUF: TEdit
-      Left = 448
-      Top = 35
-      Width = 121
-      Height = 23
       TabOrder = 0
-      TextHint = 'Estado UF'
+      TextHint = 'Bairro'
     end
     object EdtRazaoSocial: TEdit
       Left = 16
       Top = 35
       Width = 121
       Height = 23
-      TabOrder = 4
+      TabOrder = 2
       Text = 'EdtRazaoSocial'
     end
     object EdtKnae: TEdit
@@ -213,7 +199,7 @@ object Form1: TForm1
       Top = 35
       Width = 154
       Height = 23
-      TabOrder = 5
+      TabOrder = 3
       Text = 'EdtKnae'
     end
     object EdtNaturezaJuridica: TEdit
@@ -221,7 +207,7 @@ object Form1: TForm1
       Top = 35
       Width = 121
       Height = 23
-      TabOrder = 6
+      TabOrder = 4
       Text = 'EdtNaturezaJuridica'
     end
     object EdtDDD: TEdit
@@ -229,7 +215,7 @@ object Form1: TForm1
       Top = 80
       Width = 121
       Height = 23
-      TabOrder = 7
+      TabOrder = 5
       Text = 'EdtDDD'
       TextHint = '2 Digitos'
     end
@@ -238,7 +224,7 @@ object Form1: TForm1
       Top = 80
       Width = 121
       Height = 23
-      TabOrder = 8
+      TabOrder = 6
       Text = 'EdtDataAberturaAPartirDe'
     end
     object EdtDataAberturaAte: TEdit
@@ -246,7 +232,7 @@ object Form1: TForm1
       Top = 80
       Width = 121
       Height = 23
-      TabOrder = 9
+      TabOrder = 7
       Text = 'EdtDataAberturaAte'
     end
     object CBAtivaInativa: TComboBox
@@ -255,7 +241,7 @@ object Form1: TForm1
       Width = 97
       Height = 23
       ItemIndex = 0
-      TabOrder = 10
+      TabOrder = 8
       Text = 'ATIVA'
       Items.Strings = (
         'ATIVA'
@@ -266,70 +252,70 @@ object Form1: TForm1
       Top = 134
       Width = 73
       Height = 20
-      TabOrder = 11
+      TabOrder = 9
     end
     object ToggleSwitch2: TToggleSwitch
       Left = 110
       Top = 134
       Width = 73
       Height = 20
-      TabOrder = 12
+      TabOrder = 10
     end
     object ToggleSwitch3: TToggleSwitch
       Left = 216
       Top = 134
       Width = 73
       Height = 20
-      TabOrder = 13
+      TabOrder = 11
     end
     object ToggleSwitch4: TToggleSwitch
       Left = 354
       Top = 134
       Width = 73
       Height = 20
-      TabOrder = 14
+      TabOrder = 12
     end
     object ToggleSwitch5: TToggleSwitch
       Left = 442
       Top = 134
       Width = 73
       Height = 20
-      TabOrder = 15
+      TabOrder = 13
     end
     object ToggleSwitch6: TToggleSwitch
       Left = 530
       Top = 134
       Width = 73
       Height = 20
-      TabOrder = 16
+      TabOrder = 14
     end
     object ToggleSwitch7: TToggleSwitch
       Left = 618
       Top = 134
       Width = 73
       Height = 20
-      TabOrder = 17
+      TabOrder = 15
     end
     object ToggleSwitch8: TToggleSwitch
       Left = 710
       Top = 134
       Width = 73
       Height = 20
-      TabOrder = 18
+      TabOrder = 16
     end
     object ToggleSwitch9: TToggleSwitch
       Left = 976
       Top = 37
       Width = 73
       Height = 20
-      TabOrder = 19
+      TabOrder = 17
     end
     object EdtPagina: TEdit
       Left = 570
       Top = 80
       Width = 121
       Height = 23
-      TabOrder = 20
+      TabOrder = 18
       Text = '1'
       TextHint = 'Numero da P'#225'gina'
     end
@@ -339,7 +325,7 @@ object Form1: TForm1
       Width = 111
       Height = 65
       Caption = 'Pagina Corrente'
-      TabOrder = 21
+      TabOrder = 19
       object lblPagina: TLabel
         Left = 2
         Top = 17
@@ -354,8 +340,6 @@ object Form1: TForm1
         Font.Name = 'Segoe UI'
         Font.Style = [fsBold]
         ParentFont = False
-        ExplicitLeft = 50
-        ExplicitTop = 40
         ExplicitWidth = 87
         ExplicitHeight = 37
       end
@@ -366,7 +350,7 @@ object Form1: TForm1
       Width = 89
       Height = 65
       Caption = 'Status Code'
-      TabOrder = 22
+      TabOrder = 20
       object lblStatusCode: TLabel
         Left = 2
         Top = 17
@@ -391,7 +375,7 @@ object Form1: TForm1
       Width = 100
       Height = 65
       Caption = 'Registros'
-      TabOrder = 23
+      TabOrder = 21
       object lblRegistros: TLabel
         Left = 2
         Top = 17
@@ -409,6 +393,49 @@ object Form1: TForm1
         ExplicitWidth = 16
         ExplicitHeight = 37
       end
+    end
+    object cbUF: TComboBox
+      Left = 443
+      Top = 35
+      Width = 99
+      Height = 23
+      TabOrder = 22
+      OnChange = cbUFChange
+      Items.Strings = (
+        'AC'
+        'AL'
+        'AP'
+        'AM'
+        'BA'
+        'CE'
+        'DF'
+        'ES'
+        'GO'
+        'MA'
+        'MT'
+        'MS'
+        'MG'
+        'PA'
+        'PB'
+        'PR'
+        'PE'
+        'PI'
+        'RJ'
+        'RN'
+        'RS'
+        'RO'
+        'RR'
+        'SC'
+        'SP'
+        'SE'
+        'TO')
+    end
+    object cbMunicipios: TComboBox
+      Left = 551
+      Top = 35
+      Width = 150
+      Height = 23
+      TabOrder = 23
     end
   end
   object DBGrid1: TDBGrid
@@ -433,6 +460,7 @@ object Form1: TForm1
     Align = alTop
     ScrollBars = ssBoth
     TabOrder = 1
+    ExplicitWidth = 430
   end
   object Panel1: TPanel
     Left = 0
@@ -441,6 +469,8 @@ object Form1: TForm1
     Height = 41
     Align = alBottom
     TabOrder = 3
+    ExplicitTop = 418
+    ExplicitWidth = 1130
     object Button1: TButton
       AlignWithMargins = True
       Left = 1048
@@ -452,6 +482,7 @@ object Form1: TForm1
       Caption = 'Enviar'
       TabOrder = 0
       OnClick = Button1Click
+      ExplicitLeft = 1044
     end
   end
   object FDMemTable1: TFDMemTable
