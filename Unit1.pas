@@ -113,6 +113,7 @@ type
     function FormatarJSON(const ADados: string): string;
     procedure CarregarMunicipiosDoJSON(const JSON: string);
     function RemoverAcentos(const ATexto: string): string;
+    function MessageDlg(const Mensagem : String; aDlgType : TMsgDlgType; aBotao : TMsgDlgButtons) : Word;overload;
   public
     { Public declarations }
   end;
@@ -127,31 +128,49 @@ implementation
 
 
 procedure TForm1.Button1Click(Sender: TObject);
-var
-  LResponse: IResponse;
-  LJson    : string;
-  C        : integer;
-  D        : Integer;
-  LS_SomenteMei: string;
-  LS_ExcluiMei: string;
-  LS_ComContatoTelefone: string;
-  LS_SomenteFixo: string;
-  LS_SomenteMatriz: string;
-  LS_SomenteFilial: string;
-  LS_SomenteCelular: string;
-  LS_ComEmail: string;
-  LS_IncluirAtividadeSecundaria: string;
+//var
+//  LResponse: IResponse;
+//  LJson    : string;
+//  C        : integer;
+//  D        : Integer;
+//  LS_SomenteMei: string;
+//  LS_ExcluiMei: string;
+//  LS_ComContatoTelefone: string;
+//  LS_SomenteFixo: string;
+//  LS_SomenteMatriz: string;
+//  LS_SomenteFilial: string;
+//  LS_SomenteCelular: string;
+//  LS_ComEmail: string;
+//  LS_IncluirAtividadeSecundaria: string;
 begin
    try
       //validações
-
+     TTHread.CreateAnonymousThread(procedure
+     var
+        LResponse: IResponse;
+        LJson    : string;
+        C        : integer;
+        D        : Integer;
+        LS_SomenteMei: string;
+        LS_ExcluiMei: string;
+        LS_ComContatoTelefone: string;
+        LS_SomenteFixo: string;
+        LS_SomenteMatriz: string;
+        LS_SomenteFilial: string;
+        LS_SomenteCelular: string;
+        LS_ComEmail: string;
+        LS_IncluirAtividadeSecundaria: string;
+     begin
 
       D:= StrToInt(EdtPagina.Text);
 
       for C := 1 to D do
       begin
         //Limpa o memo do JSON a cada requisição enviada
-        Memo1.Clear;
+        TThread.Synchronize(nil, procedure
+        begin
+          Memo1.Clear;
+        end);
 
         //Ler os Switchs
          if TSSomenteMei.State = tssOff then
@@ -218,29 +237,37 @@ begin
 
         Ljson:= TMyConst.JSONENVIO;
 
-        lblStatusCode.Caption:= '0';
+        TThread.Synchronize(nil, procedure
+        begin
+         lblStatusCode.Caption:= '0';
+        end);
 
-        LResponse :=
-           TRequest.New.BaseURL('https://api.casadosdados.com.br/v2/public/cnpj/search')
-           .Accept('application/json')
-           .AddBody(FormatarJSON(Ljson))
-           .Post;
+          LResponse :=
+             TRequest.New.BaseURL('https://api.casadosdados.com.br/v2/public/cnpj/search')
+             .Accept('application/json')
+             .AddBody(FormatarJSON(Ljson))
+             .Post;
+
 
         //Mostra na tela o número da página
-        lblPagina.Caption:= IntToStr(C);
-
+        TThread.Synchronize(nil, procedure
+        begin
+          lblPagina.Caption:= IntToStr(C);
+        end);
 
         if LResponse.StatusCode = 200 then
         begin
           //Mostra o Status Code na Tela.
-          lblStatusCode.Font.Color:= ClGreen;
-          lblStatusCode.Caption:= IntToStr(LResponse.StatusCode);
+          TThread.Synchronize(nil, procedure
+          begin
+            lblStatusCode.Font.Color:= ClGreen;
+            lblStatusCode.Caption:= IntToStr(LResponse.StatusCode);
 
-          //Preenche o memo com o retorno da API
-          memo1.Lines.Add(FormatarJSON(LResponse.Content));
-          memo1.Perform(WM_VSCROLL,SB_THUMBPOSITION,0);
-
-          CarregarJSONParaFDMemTable(Memo1.Text, FDMemTable1);
+            //Preenche o memo com o retorno da API
+            memo1.Lines.Add(FormatarJSON(LResponse.Content));
+            memo1.Perform(WM_VSCROLL,SB_THUMBPOSITION,0);
+            CarregarJSONParaFDMemTable(Memo1.Text, FDMemTable1);
+          end);
 
         end
         else
@@ -248,15 +275,23 @@ begin
         if LResponse.StatusCode <> 200 then
         begin
            //Mostra o Status Code na Tela.
-          lblStatusCode.Font.Color:= ClRed;
-          lblStatusCode.Caption:= IntToStr(LResponse.StatusCode);
+          TThread.Synchronize(nil, procedure
+          begin
+            lblStatusCode.Font.Color:= ClRed;
+            lblStatusCode.Caption:= IntToStr(LResponse.StatusCode);
+            ShowMessage('Não existem mais dados para essa pesquisa');
+            exit;
+          end);
 
-          ShowMessage('Não existem mais dados para essa pesquisa');
-          exit;
         end;
       end;
-      Showmessage('Pesquisa Finalizada');
 
+      TTHread.Synchronize(nil,procedure
+      begin
+        Showmessage('Pesquisa Finalizada');
+      end);
+
+    end).Start;
    Except  on E: Exception do
         begin
             ShowMessage('Erro : ' + E.Message);
@@ -368,7 +403,8 @@ begin
   if Assigned(CNPJsArray) and (CNPJsArray is TJSONArray) then
   begin
     //Gravar no Banco de dados
-    RespostaUsuario := MessageDlg('Deseja gravar os dados?', mtConfirmation, mbYesNo, 0);
+    RespostaUsuario := MessageDlg('Deseja gravar os dados?', mtConfirmation, mbYesNo);
+
     // Verificar a resposta do usuário
     if RespostaUsuario = mrYes then
     begin
@@ -535,6 +571,18 @@ procedure TForm1.FormCreate(Sender: TObject);
 begin
   // Inicializar a lista de municípios
   Municipios := TObjectList<TMunicipio>.Create;
+end;
+
+function TForm1.MessageDlg(const Mensagem: String; aDlgType: TMsgDlgType;
+  aBotao: TMsgDlgButtons): Word;
+var
+  Form : TForm;
+begin
+  Form:= CreateMessageDialog(Mensagem,aDlgType, aBotao);
+  (Form.FindComponent('Yes') as TButton).Caption:= 'Sim';
+  (Form.FindComponent('No') as TButton).Caption:= 'Não';
+  Result:= Form.ShowModal;
+
 end;
 
 function TForm1.RemoverAcentos(const ATexto: string): string;

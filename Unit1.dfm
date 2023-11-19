@@ -318,7 +318,7 @@ object Form1: TForm1
       Width = 121
       Height = 23
       TabOrder = 18
-      Text = '100'
+      Text = '1'
       TextHint = 'Numero da P'#225'gina'
     end
     object GroupBox2: TGroupBox
@@ -462,7 +462,7 @@ object Form1: TForm1
     Align = alTop
     ScrollBars = ssBoth
     TabOrder = 1
-    ExplicitWidth = 430
+    ExplicitWidth = 1130
   end
   object Panel1: TPanel
     Left = 0
@@ -471,8 +471,6 @@ object Form1: TForm1
     Height = 41
     Align = alBottom
     TabOrder = 3
-    ExplicitTop = 418
-    ExplicitWidth = 1130
     object Button1: TButton
       AlignWithMargins = True
       Left = 1048
