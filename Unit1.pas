@@ -183,9 +183,10 @@ begin
           exit;
         end;
       end;
+      Showmessage('Pesquisa Finalizada');
    Except  on E: Exception do
         begin
-            ShowMessage('Erro durante a transação: ' + E.Message);
+            ShowMessage('Erro : ' + E.Message);
         end;
    end;
 
@@ -248,48 +249,56 @@ begin
     CNPJsArray:= TJSONArray.Create(nil);
     CNPJsArray := DataObject.GetValue('cnpj') as TJSONArray;
 
-    for I := 0 to CNPJsArray.Size - 1 do
+
+    if Assigned(CNPJsArray) and (CNPJsArray is TJSONArray) then
     begin
-      //Zera os registros na Tela.
-      lblRegistros.caption:='0';
+      for I := 0 to CNPJsArray.Size - 1 do
+      begin
+        //Zera os registros na Tela.
+        lblRegistros.caption:='0';
 
-      // Obtém o objeto CNPJ
-      CNPJObject:= TJSONObject.Create(nil);
-      CNPJObject := CNPJsArray.Items[I] as TJSONObject;
+        // Obtém o objeto CNPJ
+        CNPJObject:= TJSONObject.Create(nil);
+        CNPJObject := CNPJsArray.Items[I] as TJSONObject;
 
-      // Adiciona os campos na FDMemTable e preenche os valores
-      MemTable.Append;
-      MemTable.FieldByName('cnpj').AsString               := CNPJObject.GetValue('cnpj').Value;
-      MemTable.FieldByName('cnpj_raiz').AsString          := CNPJObject.GetValue('cnpj_raiz').Value;
-      MemTable.FieldByName('filial_numero').AsInteger     := CNPJObject.GetValue<integer>('filial_numero');
-      MemTable.FieldByName('razao_social').AsString       := CNPJObject.GetValue('razao_social').Value;
-      MemTable.FieldByName('nome_fantasia').AsString      := CNPJObject.GetValue('nome_fantasia').Value;
-      MemTable.FieldByName('data_abertura').AsString      := CNPJObject.GetValue('data_abertura').Value;
-      MemTable.FieldByName('situacao_cadastral').AsString := CNPJObject.GetValue('situacao_cadastral').Value;
-      MemTable.FieldByName('logradouro').AsString         := CNPJObject.GetValue('logradouro').Value;
-      MemTable.FieldByName('numero').AsString             := CNPJObject.GetValue('numero').Value;
-      MemTable.FieldByName('bairro').AsString             := CNPJObject.GetValue('bairro').Value;
-      MemTable.FieldByName('municipio').AsString          := CNPJObject.GetValue('municipio').Value;
-      MemTable.FieldByName('uf').AsString                 := CNPJObject.GetValue('uf').Value;
+        // Adiciona os campos na FDMemTable e preenche os valores
+        MemTable.Append;
+        MemTable.FieldByName('cnpj').AsString               := CNPJObject.GetValue('cnpj').Value;
+        MemTable.FieldByName('cnpj_raiz').AsString          := CNPJObject.GetValue('cnpj_raiz').Value;
+        MemTable.FieldByName('filial_numero').AsInteger     := CNPJObject.GetValue<integer>('filial_numero');
+        MemTable.FieldByName('razao_social').AsString       := CNPJObject.GetValue('razao_social').Value;
+        MemTable.FieldByName('nome_fantasia').AsString      := CNPJObject.GetValue('nome_fantasia').Value;
+        MemTable.FieldByName('data_abertura').AsString      := CNPJObject.GetValue('data_abertura').Value;
+        MemTable.FieldByName('situacao_cadastral').AsString := CNPJObject.GetValue('situacao_cadastral').Value;
+        MemTable.FieldByName('logradouro').AsString         := CNPJObject.GetValue('logradouro').Value;
+        MemTable.FieldByName('numero').AsString             := CNPJObject.GetValue('numero').Value;
+        MemTable.FieldByName('bairro').AsString             := CNPJObject.GetValue('bairro').Value;
+        MemTable.FieldByName('municipio').AsString          := CNPJObject.GetValue('municipio').Value;
+        MemTable.FieldByName('uf').AsString                 := CNPJObject.GetValue('uf').Value;
 
-      AtivPrin:=  CNPJObject.GetValue<TJSONObject>('atividade_principal',nil);
-      MemTable.FieldByName('atividade_codigo').AsString   := AtivPrin.GetValue('codigo').Value;
-      MemTable.FieldByName('atividade_descricao').AsString:= AtivPrin.GetValue('descricao').Value;
+        AtivPrin:=  CNPJObject.GetValue<TJSONObject>('atividade_principal',nil);
+        MemTable.FieldByName('atividade_codigo').AsString   := AtivPrin.GetValue('codigo').Value;
+        MemTable.FieldByName('atividade_descricao').AsString:= AtivPrin.GetValue('descricao').Value;
 
-      MemTable.FieldByName('cnpj_mei').AsBoolean          := CNPJObject.GetValue<boolean>('cnpj_mei');
-      MemTable.FieldByName('versao').AsString             := CNPJObject.GetValue('versao').Value;
+        MemTable.FieldByName('cnpj_mei').AsBoolean          := CNPJObject.GetValue<boolean>('cnpj_mei');
+        MemTable.FieldByName('versao').AsString             := CNPJObject.GetValue('versao').Value;
 
-      // Posta os dados na FDMemTable
-      MemTable.Post;
+        // Posta os dados na FDMemTable
+        MemTable.Post;
 
+      end;
     end;
+
   finally
     // Libera o objeto JSON
     JSONObject.Free;
+  end;
 
-     //Mostra a quantidade de registros da Pagina de dados na tela
-     lblRegistros.caption:= IntToStr(MemTable.RecordCount);
+  //Mostra a quantidade de registros da Pagina de dados na tela
+  lblRegistros.caption:= IntToStr(MemTable.RecordCount);
 
+  if Assigned(CNPJsArray) and (CNPJsArray is TJSONArray) then
+  begin
     //Gravar no Banco de dados
     RespostaUsuario := MessageDlg('Deseja gravar os dados?', mtConfirmation, mbYesNo, 0);
     // Verificar a resposta do usuário
@@ -376,6 +385,7 @@ begin
       ShowMessage('Dados não gravados.');
     end;
   end;
+
 end;
 
 function TForm1.FormatarJSON(const ADados: string): string;
