@@ -292,11 +292,11 @@ begin
       end);
 
     end).Start;
-   Except  on E: Exception do
-        begin
-            ShowMessage('Erro : ' + E.Message);
-        end;
-   end;
+     Except  on E: Exception do
+          begin
+              ShowMessage('Erro : ' + E.Message);
+          end;
+     end;
 
 end;
 
@@ -535,19 +535,22 @@ begin
   // fazer a requisição do IBGE e carregar no Combobox Municipios
   UF := cbUF.Items[cbUF.ItemIndex];
 
-  LResponse :=
-        TRequest.New.BaseURL('https://servicodados.ibge.gov.br/api/v1/localidades/estados/' + UF + '/municipios')
-        .Accept('application/json')
-        .Get;
+  TThread.CreateAnonymousThread(procedure
+  begin
+    LResponse :=
+          TRequest.New.BaseURL('https://servicodados.ibge.gov.br/api/v1/localidades/estados/' + UF + '/municipios')
+          .Accept('application/json')
+          .Get;
 
-  LRetorno:= LResponse.Content;
+    LRetorno:= LResponse.Content;
 
-  // Processar o JSON e preencher a lista de municípios
-  CarregarMunicipiosDoJSON(LRetorno);
+    // Processar o JSON e preencher a lista de municípios
+    CarregarMunicipiosDoJSON(LRetorno);
 
-  // Preencher o ComboBox com os nomes dos municípios
-  for var Municipio in Municipios do
-    cbMunicipios.Items.Add(Municipio.nome);
+    // Preencher o ComboBox com os nomes dos municípios
+    for var Municipio in Municipios do
+      cbMunicipios.Items.Add(Municipio.nome);
+  end).Start;
 end;
 
 function TForm1.FormatarJSON(const ADados: string): string;
