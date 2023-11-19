@@ -1,7 +1,7 @@
 object Form1: TForm1
   Left = 0
   Top = 0
-  Caption = 'Form1'
+  Caption = 'Pesquisa Casa dos Dados'
   ClientHeight = 678
   ClientWidth = 1134
   Color = clBtnFace
