@@ -38,7 +38,11 @@ uses
   FireDAC.VCLUI.Wait,
   FireDAC.DApt,
   Unit2,
-  IniFiles, Vcl.ExtCtrls, Vcl.WinXCtrls;
+  IniFiles,
+  Vcl.ExtCtrls,
+  Vcl.WinXCtrls,
+  Unit3,
+  Generics.Collections;
 
 type
   TForm1 = class(TForm)
@@ -48,8 +52,6 @@ type
     DataSource1: TDataSource;
     GroupBox1: TGroupBox;
     Panel1: TPanel;
-    EditUF: TEdit;
-    EditMunicipio: TEdit;
     EditBairro: TEdit;
     EditCEP: TEdit;
     Lbl_Estado: TLabel;
@@ -97,15 +99,21 @@ type
     lblStatusCode: TLabel;
     GroupBox4: TGroupBox;
     lblRegistros: TLabel;
+    cbUF: TComboBox;
+    cbMunicipios: TComboBox;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure cbUFChange(Sender: TObject);
   private
     { Private declarations }
     JSONObject, DataObject: TJSONObject;
     CNPJsArray: TJSONArray;
+    Municipios: TObjectList<TMunicipio>;
     procedure CarregarJSONParaFDMemTable(const JSONString: string; MemTable: TFDMemTable);
     function FormatarJSON(const ADados: string): string;
+    procedure CarregarMunicipiosDoJSON(const JSON: string);
+    function RemoverAcentos(const ATexto: string): string;
   public
     { Public declarations }
   end;
@@ -118,6 +126,7 @@ implementation
 
 {$R *.dfm}
 
+
 procedure TForm1.Button1Click(Sender: TObject);
 var
   LResponse: IResponse;
@@ -126,15 +135,6 @@ var
   D        : Integer;
 begin
    try
-     //Só Envia os parâmetros caso sejam modificados.
-     if Trim(EditUF.Text)<>'' then
-       TMyConst.AtualizarUF(EditUF.Text);
-     if Trim(EditMunicipio.Text)<>'' then
-       TMyConst.AtualizarMunicipio(EditMunicipio.Text);
-     if Trim(EditBairro.Text)<>'' then
-       TMyConst.AtualizarBairro(EditBairro.Text);
-     if Trim(EditCEP.Text)<>'' then
-       TMyConst.AtualizarCEP(EditCEP.Text);
 
       D:= StrToInt(EdtPagina.Text);
 
@@ -143,7 +143,9 @@ begin
         //Limpa o memo do JSON a cada requisição enviada
         Memo1.Clear;
 
-        TMyConst.AtualizarPagina(IntToStr(C));
+        //TMyConst.AtualizarPagina(IntToStr(C));
+         TMyConst.AtualizaTudo(cbUF.Items[cbUF.ItemIndex],cbMunicipios.Items[cbMunicipios.ItemIndex],EditBairro.Text,EditCEP.Text,IntToStr(C));
+
         Ljson:= TMyConst.JSONENVIO;
 
         lblStatusCode.Caption:= '0';
@@ -388,6 +390,64 @@ begin
 
 end;
 
+procedure TForm1.CarregarMunicipiosDoJSON(const JSON: string);
+var
+  JSONArr: TJSONArray;
+  JSONObj: TJSONObject;
+  Municipio: TMunicipio;
+begin
+  JSONArr := TJSONObject.ParseJSONValue(JSON) as TJSONArray;
+
+  if Assigned(JSONArr) then
+  begin
+    for var I := 0 to JSONArr.Count - 1 do
+    begin
+      JSONObj := JSONArr.Items[I] as TJSONObject;
+
+      if Assigned(JSONObj) then
+      begin
+        Municipio := TMunicipio.Create;
+        Municipio.id := JSONObj.GetValue('id').AsType<Integer>;
+        // Remover acentos do nome do município
+        Municipio.nome := RemoverAcentos(JSONObj.GetValue('nome').Value);
+
+        // Preencher outras propriedades conforme necessário
+
+        Municipios.Add(Municipio);
+      end;
+    end;
+  end;
+end;
+
+procedure TForm1.cbUFChange(Sender: TObject);
+var
+  LResponse: IResponse;
+  LJson    : string;
+  LRetorno: string;
+  UF: string;
+  UFItem: string;
+begin
+  Municipios.Clear;
+  cbMunicipios.Items.Clear;
+
+  // fazer a requisição do IBGE e carregar no Combobox Municipios
+  UF := cbUF.Items[cbUF.ItemIndex];
+
+  LResponse :=
+        TRequest.New.BaseURL('https://servicodados.ibge.gov.br/api/v1/localidades/estados/' + UF + '/municipios')
+        .Accept('application/json')
+        .Get;
+
+  LRetorno:= LResponse.Content;
+
+  // Processar o JSON e preencher a lista de municípios
+  CarregarMunicipiosDoJSON(LRetorno);
+
+  // Preencher o ComboBox com os nomes dos municípios
+  for var Municipio in Municipios do
+    cbMunicipios.Items.Add(Municipio.nome);
+end;
+
 function TForm1.FormatarJSON(const ADados: string): string;
 var
   LV: System.JSON.TJSONValue;
@@ -407,7 +467,20 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  //FDMemTable1.Open;
+  // Inicializar a lista de municípios
+  Municipios := TObjectList<TMunicipio>.Create;
+end;
+
+function TForm1.RemoverAcentos(const ATexto: string): string;
+const
+  AccentedChars: array[0..11] of string = ('á', 'é', 'í', 'ó', 'ú', 'à', 'è', 'ì', 'ò', 'ù', 'ã', 'õ');
+  UnaccentedChars: array[0..11] of string = ('a', 'e', 'i', 'o', 'u', 'a', 'e', 'i', 'o', 'u', 'a', 'o');
+var
+  I: Integer;
+begin
+  Result := ATexto;
+  for I := Low(AccentedChars) to High(AccentedChars) do
+    Result := StringReplace(Result, AccentedChars[I], UnaccentedChars[I], [rfReplaceAll, rfIgnoreCase]);
 end;
 
 end.
