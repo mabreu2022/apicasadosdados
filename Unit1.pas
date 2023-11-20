@@ -112,6 +112,7 @@ type
     CNPJsArray: TJSONArray;
     Municipios: TObjectList<TMunicipio>;
     SuprimirPergunta: string;
+    Mensagens: string;
     procedure CarregarJSONParaFDMemTable(const JSONString: string; MemTable: TFDMemTable);
     function FormatarJSON(const ADados: string): string;
     procedure CarregarMunicipiosDoJSON(const JSON: string);
@@ -297,7 +298,7 @@ var
   CNPJObject: TJSONObject;
   AtivPrin : TJSONObject;
   I: Integer;
-  Qry: TFDquery;
+  Qry, QryVerificarCNPJ: TFDquery;
   Connection: TFDConnection;
   IniFile: TIniFile;
   RespostaUsuario: Integer;
@@ -398,6 +399,7 @@ begin
 
     try
       SuprimirPergunta := IniFile.ReadString('MySQLConfig', 'SuprimirPergunta', '');
+      Mensagens        := IniFile.ReadString('MySQLConfig', 'Mensagens', '');
     finally
       IniFile.Free;
     end;
@@ -438,40 +440,65 @@ begin
         begin
             Qry:= TFDQuery.Create(nil);
             Qry.Connection:= Connection;
+
+            //testar se o cnpj já existe no banco para poder inserir ou não
+            QryVerificarCNPJ:= TFDQuery.Create(nil);
+            QryVerificarCNPJ.Connection:= Connection;
             try
+              QryVerificarCNPJ.SQL.Clear;
+              QryVerificarCNPJ.SQL.Add('SELECT CNPJ FROM CLIENTES');
+              QryVerificarCNPJ.SQL.Add(' WHERE CNPJ=:PCNPJ');
+              QryVerificarCNPJ.ParamByName('PCNPJ').DataType:= ftstring;
+              QryVerificarCNPJ.ParamByName('PCNPJ').AsString:= MemTable.FieldByName('cnpj').AsString;
+              QryVerificarCNPJ.Open;
 
-              Qry.SQL.Clear;
-              Qry.SQL.Add('INSERT INTO clientes (' +
-                          'cnpj, cnpj_raiz, filial_numero, razao_social, nome_fantasia, ' +
-                          'data_abertura, situacao_cadastral, logradouro, numero, bairro, ' +
-                          'municipio, uf, codigo, descricao, cnpj_mei, versao) ' +
-                          'VALUES (:cnpj, :cnpj_raiz, :filial_numero, :razao_social, :nome_fantasia, ' +
-                          ':data_abertura, :situacao_cadastral, :logradouro, :numero, :bairro, ' +
-                          ':municipio, :uf, :codigo, :descricao, :cnpj_mei, :versao)');
+              if QryVerificarCNPJ.RecordCount = 0 then
+              begin
+                try
 
-              Qry.ParamByName('cnpj').AsString                := MemTable.FieldByName('cnpj').AsString;
-              Qry.ParamByName('cnpj_raiz').AsString           := MemTable.FieldByName('cnpj_raiz').AsString;
-              Qry.ParamByName('filial_numero').AsInteger      := MemTable.FieldByName('filial_numero').AsInteger;
-              Qry.ParamByName('razao_social').AsString        := MemTable.FieldByName('razao_social').AsString;
-              Qry.ParamByName('nome_fantasia').AsString       := MemTable.FieldByName('nome_fantasia').AsString;
-              Qry.ParamByName('data_abertura').AsString       := MemTable.FieldByName('data_abertura').AsString;
-              Qry.ParamByName('situacao_cadastral').AsString  := MemTable.FieldByName('situacao_cadastral').AsString;
-              Qry.ParamByName('logradouro').AsString          := MemTable.FieldByName('logradouro').AsString;
-              Qry.ParamByName('numero').AsString              := MemTable.FieldByName('numero').AsString;
-              Qry.ParamByName('bairro').AsString              := MemTable.FieldByName('bairro').AsString;
-              Qry.ParamByName('municipio').AsString           := MemTable.FieldByName('municipio').AsString;
-              Qry.ParamByName('uf').AsString                  := MemTable.FieldByName('uf').AsString;
-              Qry.ParamByName('codigo').AsString              := MemTable.FieldByName('atividade_codigo').AsString;
-              Qry.ParamByName('descricao').AsString           := MemTable.FieldByName('atividade_descricao').AsString;
-              Qry.ParamByName('cnpj_mei').AsBoolean           := MemTable.FieldByName('cnpj_mei').AsBoolean;
-              Qry.ParamByName('versao').AsString              := MemTable.FieldByName('versao').AsString;
+                  Qry.SQL.Clear;
+                  Qry.SQL.Add('INSERT INTO clientes (' +
+                              'cnpj, cnpj_raiz, filial_numero, razao_social, nome_fantasia, ' +
+                              'data_abertura, situacao_cadastral, logradouro, numero, bairro, ' +
+                              'municipio, uf, codigo, descricao, cnpj_mei, versao) ' +
+                              'VALUES (:cnpj, :cnpj_raiz, :filial_numero, :razao_social, :nome_fantasia, ' +
+                              ':data_abertura, :situacao_cadastral, :logradouro, :numero, :bairro, ' +
+                              ':municipio, :uf, :codigo, :descricao, :cnpj_mei, :versao)');
 
-              Qry.ExecSQL;
-              MemTable.Next;
+                  Qry.ParamByName('cnpj').AsString                := MemTable.FieldByName('cnpj').AsString;
+                  Qry.ParamByName('cnpj_raiz').AsString           := MemTable.FieldByName('cnpj_raiz').AsString;
+                  Qry.ParamByName('filial_numero').AsInteger      := MemTable.FieldByName('filial_numero').AsInteger;
+                  Qry.ParamByName('razao_social').AsString        := MemTable.FieldByName('razao_social').AsString;
+                  Qry.ParamByName('nome_fantasia').AsString       := MemTable.FieldByName('nome_fantasia').AsString;
+                  Qry.ParamByName('data_abertura').AsString       := MemTable.FieldByName('data_abertura').AsString;
+                  Qry.ParamByName('situacao_cadastral').AsString  := MemTable.FieldByName('situacao_cadastral').AsString;
+                  Qry.ParamByName('logradouro').AsString          := MemTable.FieldByName('logradouro').AsString;
+                  Qry.ParamByName('numero').AsString              := MemTable.FieldByName('numero').AsString;
+                  Qry.ParamByName('bairro').AsString              := MemTable.FieldByName('bairro').AsString;
+                  Qry.ParamByName('municipio').AsString           := MemTable.FieldByName('municipio').AsString;
+                  Qry.ParamByName('uf').AsString                  := MemTable.FieldByName('uf').AsString;
+                  Qry.ParamByName('codigo').AsString              := MemTable.FieldByName('atividade_codigo').AsString;
+                  Qry.ParamByName('descricao').AsString           := MemTable.FieldByName('atividade_descricao').AsString;
+                  Qry.ParamByName('cnpj_mei').AsBoolean           := MemTable.FieldByName('cnpj_mei').AsBoolean;
+                  Qry.ParamByName('versao').AsString              := MemTable.FieldByName('versao').AsString;
+
+                  Qry.ExecSQL;
+                  MemTable.Next;
+                finally
+                  Qry.Free;
+                  Connection.Commit;
+                  Connection.Connected := False;
+                end;
+              end
+              else
+              begin
+                if Mensagens ='True' then
+                  ShowMessage('CNPJ Já cadastrado no banco de dados ' + MemTable.FieldByName('cnpj').AsString);
+
+                MemTable.Next;
+              end;
             finally
-              Qry.Free;
-              Connection.Commit;
-              Connection.Connected := False;
+               QryVerificarCNPJ.Free;
             end;
 
         end;
