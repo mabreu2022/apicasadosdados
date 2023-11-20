@@ -322,16 +322,16 @@ object Form1: TForm1
       TextHint = 'Numero da P'#225'gina'
     end
     object GroupBox2: TGroupBox
-      Left = 1012
-      Top = 88
-      Width = 111
+      Left = 1022
+      Top = 96
+      Width = 109
       Height = 65
       Caption = 'Pagina Corrente'
       TabOrder = 19
       object lblPagina: TLabel
         Left = 2
         Top = 17
-        Width = 107
+        Width = 105
         Height = 46
         Align = alClient
         Alignment = taCenter
@@ -347,16 +347,16 @@ object Form1: TForm1
       end
     end
     object GroupBox3: TGroupBox
-      Left = 904
-      Top = 88
-      Width = 89
+      Left = 862
+      Top = 96
+      Width = 74
       Height = 65
       Caption = 'Status Code'
       TabOrder = 20
       object lblStatusCode: TLabel
         Left = 2
         Top = 17
-        Width = 85
+        Width = 70
         Height = 46
         Align = alClient
         Alignment = taCenter
@@ -372,16 +372,16 @@ object Form1: TForm1
       end
     end
     object GroupBox4: TGroupBox
-      Left = 800
-      Top = 88
-      Width = 100
+      Left = 789
+      Top = 96
+      Width = 69
       Height = 65
       Caption = 'Registros'
       TabOrder = 21
       object lblRegistros: TLabel
         Left = 2
         Top = 17
-        Width = 96
+        Width = 65
         Height = 46
         Align = alClient
         Alignment = taCenter
@@ -438,6 +438,31 @@ object Form1: TForm1
       Width = 150
       Height = 23
       TabOrder = 23
+    end
+    object GroupBox5: TGroupBox
+      Left = 940
+      Top = 96
+      Width = 81
+      Height = 63
+      Caption = 'N.Caracteres'
+      TabOrder = 24
+      object lblNCaracteres: TLabel
+        Left = 2
+        Top = 17
+        Width = 77
+        Height = 44
+        Align = alClient
+        Alignment = taCenter
+        Caption = '0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -27
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ExplicitWidth = 16
+        ExplicitHeight = 37
+      end
     end
   end
   object DBGrid1: TDBGrid
