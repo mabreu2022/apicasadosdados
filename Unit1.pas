@@ -108,10 +108,8 @@ type
     lblTempo: TLabel;
     GroupBox7: TGroupBox;
     lblNTabClientes: TLabel;
-<<<<<<< HEAD
     GroupBox8: TGroupBox;
-=======
->>>>>>> a1497b4087e82b51d3c80a8a11068047f25eda30
+
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure cbUFChange(Sender: TObject);

@@ -23,8 +23,6 @@ object Form1: TForm1
     Align = alClient
     Caption = 'Par'#226'metros'
     TabOrder = 2
-    ExplicitWidth = 1130
-    ExplicitHeight = 214
     object Lbl_Estado: TLabel
       Left = 448
       Top = 17
@@ -514,7 +512,6 @@ object Form1: TForm1
         ExplicitHeight = 37
       end
     end
-<<<<<<< HEAD
     object GroupBox8: TGroupBox
       Left = 16
       Top = 157
@@ -523,8 +520,6 @@ object Form1: TForm1
       Caption = 'Duplicidade CNPJ'
       TabOrder = 27
     end
-=======
->>>>>>> a1497b4087e82b51d3c80a8a11068047f25eda30
   end
   object DBGrid1: TDBGrid
     Left = 0
@@ -548,7 +543,6 @@ object Form1: TForm1
     Align = alTop
     ScrollBars = ssBoth
     TabOrder = 1
-    ExplicitWidth = 1130
   end
   object Panel1: TPanel
     Left = 0
@@ -557,8 +551,6 @@ object Form1: TForm1
     Height = 41
     Align = alBottom
     TabOrder = 3
-    ExplicitTop = 455
-    ExplicitWidth = 1130
     object Button1: TButton
       AlignWithMargins = True
       Left = 1048
@@ -570,7 +562,6 @@ object Form1: TForm1
       Caption = 'Enviar'
       TabOrder = 0
       OnClick = Button1Click
-      ExplicitLeft = 1044
     end
   end
   object FDMemTable1: TFDMemTable
