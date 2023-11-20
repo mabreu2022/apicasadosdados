@@ -106,6 +106,8 @@ type
     Timer1: TTimer;
     GroupBox6: TGroupBox;
     lblTempo: TLabel;
+    GroupBox7: TGroupBox;
+    lblNTabClientes: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure cbUFChange(Sender: TObject);
@@ -159,6 +161,7 @@ begin
         LS_SomenteCelular: string;
         LS_ComEmail: string;
         LS_IncluirAtividadeSecundaria: string;
+        Qry: TFDQuery;
      begin
       StartTime := Now;
       Timer1.Enabled:= True;
@@ -288,11 +291,27 @@ begin
             lblNCaracteres.Caption:= IntToStr(LResponse.ContentLength);
             Timer1.Enabled:= False;
             ShowMessage('Não existem mais dados para essa pesquisa');
+            //contar os registros gravados na tabela e mostrar na tela
+            lblNTabClientes.Caption:= '0';
+            Qry:= TFDQuery.Create(nil);
+            Qry.Connection:= Connection;
+            try
+              Qry.SQL.Clear;
+              Qry.SQL.Add('SELECT COUNT(*) as total_registros FROM clientes');
+              Qry.Open;
+              TThread.Synchronize(nil, procedure
+              begin
+                lblNTabClientes.Caption := Qry.FieldByName('total_registros').AsString;
+              end);
+            finally
+              Qry.Free;
+            end;
           end);
           exit;
 
         end;
-      end;
+      end; //Fim do for
+
 
     end).Start;
      Except  on E: Exception do
@@ -429,9 +448,7 @@ begin
 
         //Desliga DisableControls
         if AtivaDisableControls ='True' then
-          FDMemTable1.DisableControls
-        else
-          FDMemTable1.EnableControls;
+          FDMemTable1.DisableControls;
 
         MemTable.First;
         while not MemTable.Eof do
