@@ -514,6 +514,14 @@ object Form1: TForm1
         ExplicitHeight = 37
       end
     end
+    object GroupBox8: TGroupBox
+      Left = 16
+      Top = 157
+      Width = 121
+      Height = 63
+      Caption = 'Duplicidade CNPJ'
+      TabOrder = 27
+    end
   end
   object DBGrid1: TDBGrid
     Left = 0

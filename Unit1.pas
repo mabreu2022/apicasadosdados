@@ -108,6 +108,7 @@ type
     lblTempo: TLabel;
     GroupBox7: TGroupBox;
     lblNTabClientes: TLabel;
+    GroupBox8: TGroupBox;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure cbUFChange(Sender: TObject);
