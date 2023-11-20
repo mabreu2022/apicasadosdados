@@ -467,14 +467,14 @@ object Form1: TForm1
     object GroupBox6: TGroupBox
       Left = 789
       Top = 161
-      Width = 185
+      Width = 147
       Height = 58
       Caption = 'Tempo Decorrido'
       TabOrder = 25
       object lblTempo: TLabel
         Left = 2
         Top = 17
-        Width = 181
+        Width = 143
         Height = 39
         Align = alClient
         Alignment = taCenter
@@ -486,6 +486,32 @@ object Form1: TForm1
         Font.Style = [fsBold]
         ParentFont = False
         ExplicitTop = 18
+        ExplicitWidth = 181
+      end
+    end
+    object GroupBox7: TGroupBox
+      Left = 940
+      Top = 163
+      Width = 191
+      Height = 54
+      Caption = 'N; Registros Tabela Clientes'
+      TabOrder = 26
+      object lblNTabClientes: TLabel
+        Left = 2
+        Top = 17
+        Width = 187
+        Height = 35
+        Align = alClient
+        Alignment = taCenter
+        Caption = '0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -27
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ExplicitWidth = 16
+        ExplicitHeight = 37
       end
     end
   end
