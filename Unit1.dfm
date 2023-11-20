@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = 'Pesquisa Casa dos Dados'
+  Caption = 'Pesquisa Casa dos Dados - 2023'
   ClientHeight = 724
   ClientWidth = 1134
   Color = clBtnFace
@@ -24,7 +24,7 @@ object Form1: TForm1
     Caption = 'Par'#226'metros'
     TabOrder = 2
     ExplicitWidth = 1130
-    ExplicitHeight = 177
+    ExplicitHeight = 214
     object Lbl_Estado: TLabel
       Left = 448
       Top = 17
@@ -485,8 +485,8 @@ object Form1: TForm1
         Font.Name = 'Segoe UI'
         Font.Style = [fsBold]
         ParentFont = False
-        ExplicitTop = 18
-        ExplicitWidth = 181
+        ExplicitWidth = 110
+        ExplicitHeight = 37
       end
     end
     object GroupBox7: TGroupBox
@@ -546,7 +546,8 @@ object Form1: TForm1
     Height = 41
     Align = alBottom
     TabOrder = 3
-    ExplicitTop = 430
+    ExplicitTop = 455
+    ExplicitWidth = 1130
     object Button1: TButton
       AlignWithMargins = True
       Left = 1048
