@@ -313,7 +313,7 @@ begin
   MemTable.FieldDefs.Add('cnpj', ftString, 14);
   MemTable.FieldDefs.Add('cnpj_raiz', ftString, 8);
   MemTable.FieldDefs.Add('filial_numero', ftInteger);
-  MemTable.FieldDefs.Add('razao_social', ftString, 100);
+  MemTable.FieldDefs.Add('razao_social', ftString, 200);
   MemTable.FieldDefs.Add('nome_fantasia', ftString, 100);
   MemTable.FieldDefs.Add('data_abertura', ftString);
   MemTable.FieldDefs.Add('situacao_cadastral', ftString, 50);
@@ -323,7 +323,7 @@ begin
   MemTable.FieldDefs.Add('municipio', ftString, 50);
   MemTable.FieldDefs.Add('uf', ftString, 2);
   MemTable.FieldDefs.Add('atividade_codigo', ftString, 10);
-  MemTable.FieldDefs.Add('atividade_descricao', ftString, 100);
+  MemTable.FieldDefs.Add('atividade_descricao', ftString, 200);
   MemTable.FieldDefs.Add('cnpj_mei', ftBoolean);
   MemTable.FieldDefs.Add('versao', ftString, 10);
 
