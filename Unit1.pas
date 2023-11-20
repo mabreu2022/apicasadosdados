@@ -103,9 +103,13 @@ type
     cbMunicipios: TComboBox;
     GroupBox5: TGroupBox;
     lblNCaracteres: TLabel;
+    Timer1: TTimer;
+    GroupBox6: TGroupBox;
+    lblTempo: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure cbUFChange(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
   private
     { Private declarations }
     JSONObject, DataObject: TJSONObject;
@@ -113,6 +117,10 @@ type
     Municipios: TObjectList<TMunicipio>;
     SuprimirPergunta: string;
     Mensagens: string;
+    AtivaDisableControls: string;
+    StartTime: TDateTime;
+    Connection: TFDConnection;
+    IniFile: TIniFile;
     procedure CarregarJSONParaFDMemTable(const JSONString: string; MemTable: TFDMemTable);
     function FormatarJSON(const ADados: string): string;
     procedure CarregarMunicipiosDoJSON(const JSON: string);
@@ -152,6 +160,8 @@ begin
         LS_ComEmail: string;
         LS_IncluirAtividadeSecundaria: string;
      begin
+      StartTime := Now;
+      Timer1.Enabled:= True;
 
       D:= StrToInt(EdtPagina.Text);
 
@@ -245,6 +255,10 @@ begin
         TThread.Synchronize(nil, procedure
         begin
           lblPagina.Caption:= IntToStr(C);
+
+          //Se a contagem de páginas for igual ao numero da pagina da pesquisa final desliga o timer
+          if C=D then
+            Timer1.Enabled:= False;
         end);
 
         //if LResponse.StatusCode = 200 then
@@ -265,8 +279,6 @@ begin
 
         end
         else
-        //Se o status code for diferente de 200 OK sai do For
-//        if LResponse.StatusCode <> 200 then
         begin
            //Mostra o Status Code na Tela.
           TThread.Synchronize(nil, procedure
@@ -274,8 +286,8 @@ begin
             lblStatusCode.Font.Color:= ClRed;
             lblStatusCode.Caption:= IntToStr(LResponse.StatusCode);
             lblNCaracteres.Caption:= IntToStr(LResponse.ContentLength);
+            Timer1.Enabled:= False;
             ShowMessage('Não existem mais dados para essa pesquisa');
-
           end);
           exit;
 
@@ -299,8 +311,6 @@ var
   AtivPrin : TJSONObject;
   I: Integer;
   Qry, QryVerificarCNPJ: TFDquery;
-  Connection: TFDConnection;
-  IniFile: TIniFile;
   RespostaUsuario: Integer;
 begin
 
@@ -396,10 +406,10 @@ begin
     //Gravar no Banco de dados
     //ler config
     IniFile := TIniFile.Create(ExtractFilePath(Application.ExeName) +'\config.ini');
-
     try
-      SuprimirPergunta := IniFile.ReadString('MySQLConfig', 'SuprimirPergunta', '');
-      Mensagens        := IniFile.ReadString('MySQLConfig', 'Mensagens', '');
+      SuprimirPergunta      := IniFile.ReadString('MySQLConfig', 'SuprimirPergunta', '');
+      Mensagens             := IniFile.ReadString('MySQLConfig', 'Mensagens', '');
+      AtivaDisableControls  := IniFile.ReadString('MySQLConfig', 'AtivaDisableControls', '');
     finally
       IniFile.Free;
     end;
@@ -412,28 +422,16 @@ begin
     // Verificar a resposta do usuário
     if RespostaUsuario = mrYes then
     begin
-      Connection := TFDConnection.Create(nil);
-
-      //Ideal Ler de um arquivo Ini para não ficar enjessado
-      Connection.DriverName := 'MySQL'; // Driver do FireDAC para MySQL
-      IniFile := TIniFile.Create(ExtractFilePath(Application.ExeName) +'\config.ini');
-      try
-        Connection.Params.Values['Server']    := IniFile.ReadString('MySQLConfig', 'Server', '');
-        Connection.Params.Values['User_Name'] := IniFile.ReadString('MySQLConfig', 'User_Name', '');
-        Connection.Params.Values['Password']  := IniFile.ReadString('MySQLConfig', 'Password', '');
-        Connection.Params.Values['Database']  := IniFile.ReadString('MySQLConfig', 'Database', '');
-        Connection.Params.Values['Port']      := IniFile.ReadString('MySQLConfig', 'Port', '');
-        SuprimirPergunta := IniFile.ReadString('MySQLConfig', 'SuprimirPergunta', '');
-
-      finally
-        IniFile.Free;
-      end;
-
-      Connection.Connected := True;
 
       //Inicia a Transação com o banco
       try
         Connection.StartTransaction;
+
+        //Desliga DisableControls
+        if AtivaDisableControls ='True' then
+          FDMemTable1.DisableControls
+        else
+          FDMemTable1.EnableControls;
 
         MemTable.First;
         while not MemTable.Eof do
@@ -488,6 +486,7 @@ begin
                   Qry.Free;
                   Connection.Commit;
                   Connection.Connected := False;
+
                 end;
               end
               else
@@ -600,6 +599,25 @@ procedure TForm1.FormCreate(Sender: TObject);
 begin
   // Inicializar a lista de municípios
   Municipios := TObjectList<TMunicipio>.Create;
+
+  Connection := TFDConnection.Create(nil);
+
+      //Ideal Ler de um arquivo Ini para não ficar enjessado
+      Connection.DriverName := 'MySQL'; // Driver do FireDAC para MySQL
+      IniFile := TIniFile.Create(ExtractFilePath(Application.ExeName) +'\config.ini');
+      try
+        Connection.Params.Values['Server']    := IniFile.ReadString('MySQLConfig', 'Server', '');
+        Connection.Params.Values['User_Name'] := IniFile.ReadString('MySQLConfig', 'User_Name', '');
+        Connection.Params.Values['Password']  := IniFile.ReadString('MySQLConfig', 'Password', '');
+        Connection.Params.Values['Database']  := IniFile.ReadString('MySQLConfig', 'Database', '');
+        Connection.Params.Values['Port']      := IniFile.ReadString('MySQLConfig', 'Port', '');
+        SuprimirPergunta := IniFile.ReadString('MySQLConfig', 'SuprimirPergunta', '');
+
+      finally
+        IniFile.Free;
+      end;
+
+      Connection.Connected := True;
 end;
 
 function TForm1.MessageDlg(const Mensagem: String; aDlgType: TMsgDlgType;
@@ -624,6 +642,20 @@ begin
   Result := ATexto;
   for I := Low(AccentedChars) to High(AccentedChars) do
     Result := StringReplace(Result, AccentedChars[I], UnaccentedChars[I], [rfReplaceAll, rfIgnoreCase]);
+end;
+
+procedure TForm1.Timer1Timer(Sender: TObject);
+var
+  ElapsedTime: TDateTime;
+begin
+  // Calcular o tempo decorrido
+  ElapsedTime := Now - StartTime;
+
+  // Exibir o tempo no formato HH:MM:SS no TLabel
+  TThread.Synchronize(nil,procedure
+  begin
+    lblTempo.Caption := FormatDateTime('hh:nn:ss', ElapsedTime);
+  end);
 end;
 
 function TForm1.ChaveCnpjExiste(const jsonStr: string): Boolean;
