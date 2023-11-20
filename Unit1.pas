@@ -114,6 +114,7 @@ type
     procedure CarregarMunicipiosDoJSON(const JSON: string);
     function RemoverAcentos(const ATexto: string): string;
     function MessageDlg(const Mensagem : String; aDlgType : TMsgDlgType; aBotao : TMsgDlgButtons) : Word;overload;
+    function ChaveCnpjExiste(const jsonStr: string): Boolean;
   public
     { Public declarations }
   end;
@@ -128,23 +129,9 @@ implementation
 
 
 procedure TForm1.Button1Click(Sender: TObject);
-//var
-//  LResponse: IResponse;
-//  LJson    : string;
-//  C        : integer;
-//  D        : Integer;
-//  LS_SomenteMei: string;
-//  LS_ExcluiMei: string;
-//  LS_ComContatoTelefone: string;
-//  LS_SomenteFixo: string;
-//  LS_SomenteMatriz: string;
-//  LS_SomenteFilial: string;
-//  LS_SomenteCelular: string;
-//  LS_ComEmail: string;
-//  LS_IncluirAtividadeSecundaria: string;
 begin
    try
-      //validações
+
      TTHread.CreateAnonymousThread(procedure
      var
         LResponse: IResponse;
@@ -255,7 +242,8 @@ begin
           lblPagina.Caption:= IntToStr(C);
         end);
 
-        if LResponse.StatusCode = 200 then
+        //if LResponse.StatusCode = 200 then
+        if LResponse.ContentLength > 100 then
         begin
           //Mostra o Status Code na Tela.
           TThread.Synchronize(nil, procedure
@@ -265,6 +253,13 @@ begin
 
             //Preenche o memo com o retorno da API
             memo1.Lines.Add(FormatarJSON(LResponse.Content));
+//            if LResponse.ContentLength = 58 then
+//            begin
+//             ShowMessage('Deu 58');
+//             TTHread.Current.Terminate;
+//            end;
+//            if ChaveCnpjExiste(TrimRight(LResponse.Content)) then
+//              Exit;
             memo1.Perform(WM_VSCROLL,SB_THUMBPOSITION,0);
             CarregarJSONParaFDMemTable(Memo1.Text, FDMemTable1);
           end);
@@ -272,7 +267,7 @@ begin
         end
         else
         //Se o status code for diferente de 200 OK sai do For
-        if LResponse.StatusCode <> 200 then
+//        if LResponse.StatusCode <> 200 then
         begin
            //Mostra o Status Code na Tela.
           TThread.Synchronize(nil, procedure
@@ -280,16 +275,17 @@ begin
             lblStatusCode.Font.Color:= ClRed;
             lblStatusCode.Caption:= IntToStr(LResponse.StatusCode);
             ShowMessage('Não existem mais dados para essa pesquisa');
-            exit;
+
           end);
+          exit;
 
         end;
       end;
 
-      TTHread.Synchronize(nil,procedure
-      begin
-        Showmessage('Pesquisa Finalizada');
-      end);
+//      TTHread.Synchronize(nil,procedure
+//      begin
+//        Showmessage('Pesquisa Finalizada');
+//      end);
 
     end).Start;
      Except  on E: Exception do
@@ -598,6 +594,36 @@ begin
   Result := ATexto;
   for I := Low(AccentedChars) to High(AccentedChars) do
     Result := StringReplace(Result, AccentedChars[I], UnaccentedChars[I], [rfReplaceAll, rfIgnoreCase]);
+end;
+
+function TForm1.ChaveCnpjExiste(const jsonStr: string): Boolean;
+var
+  jsonObj, dataObj: TJSONObject;
+  cnpjArray: TJSONArray;
+begin
+  // Carregar o JSON a partir da string
+  jsonObj := TJSONObject.ParseJSONValue(jsonStr) as TJSONObject;
+
+  try
+    Result := False;
+
+    if Assigned(jsonObj) then
+    begin
+      // Verificar se a chave 'data' existe
+      if jsonObj.TryGetValue<TJSONObject>('data', dataObj) then
+      begin
+        // Verificar se a chave 'cnpj' existe dentro do objeto 'data'
+        if dataObj.TryGetValue<TJSONArray>('cnpj', cnpjArray) then
+        begin
+          // Verificar se o array 'cnpj' não está vazio
+          Result := Assigned(cnpjArray) and (cnpjArray.Count > 0);
+        end;
+      end;
+    end;
+  finally
+    jsonObj.Free;
+  end;
+
 end;
 
 end.
