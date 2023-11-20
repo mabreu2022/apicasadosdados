@@ -4,7 +4,7 @@ object Form1: TForm1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Pesquisa Casa dos Dados'
-  ClientHeight = 678
+  ClientHeight = 724
   ClientWidth = 1134
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,7 +19,7 @@ object Form1: TForm1
     Left = 0
     Top = 241
     Width = 1134
-    Height = 189
+    Height = 226
     Align = alClient
     Caption = 'Par'#226'metros'
     TabOrder = 2
@@ -464,12 +464,36 @@ object Form1: TForm1
         ExplicitHeight = 37
       end
     end
+    object GroupBox6: TGroupBox
+      Left = 789
+      Top = 161
+      Width = 185
+      Height = 58
+      Caption = 'Tempo Decorrido'
+      TabOrder = 25
+      object lblTempo: TLabel
+        Left = 2
+        Top = 17
+        Width = 181
+        Height = 39
+        Align = alClient
+        Alignment = taCenter
+        Caption = '00:00:00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -27
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ExplicitTop = 18
+      end
+    end
   end
   object DBGrid1: TDBGrid
     Left = 0
-    Top = 471
+    Top = 508
     Width = 1134
-    Height = 207
+    Height = 216
     Align = alBottom
     DataSource = DataSource1
     TabOrder = 0
@@ -491,11 +515,12 @@ object Form1: TForm1
   end
   object Panel1: TPanel
     Left = 0
-    Top = 430
+    Top = 467
     Width = 1134
     Height = 41
     Align = alBottom
     TabOrder = 3
+    ExplicitTop = 430
     object Button1: TButton
       AlignWithMargins = True
       Left = 1048
@@ -528,5 +553,11 @@ object Form1: TForm1
     DataSet = FDMemTable1
     Left = 720
     Top = 480
+  end
+  object Timer1: TTimer
+    Enabled = False
+    OnTimer = Timer1Timer
+    Left = 304
+    Top = 496
   end
 end
