@@ -111,6 +111,7 @@ type
     JSONObject, DataObject: TJSONObject;
     CNPJsArray: TJSONArray;
     Municipios: TObjectList<TMunicipio>;
+    SuprimirPergunta: string;
     procedure CarregarJSONParaFDMemTable(const JSONString: string; MemTable: TFDMemTable);
     function FormatarJSON(const ADados: string): string;
     procedure CarregarMunicipiosDoJSON(const JSON: string);
@@ -392,7 +393,19 @@ begin
   if Assigned(CNPJsArray) and (CNPJsArray is TJSONArray) then
   begin
     //Gravar no Banco de dados
-    RespostaUsuario := MessageDlg('Deseja gravar os dados?', mtConfirmation, mbYesNo);
+    //ler config
+    IniFile := TIniFile.Create(ExtractFilePath(Application.ExeName) +'\config.ini');
+
+    try
+      SuprimirPergunta := IniFile.ReadString('MySQLConfig', 'SuprimirPergunta', '');
+    finally
+      IniFile.Free;
+    end;
+
+    if SuprimirPergunta='True' then
+      RespostaUsuario := mrYes
+    else
+     RespostaUsuario := MessageDlg('Deseja gravar os dados?', mtConfirmation, mbYesNo);
 
     // Verificar a resposta do usuário
     if RespostaUsuario = mrYes then
@@ -408,6 +421,8 @@ begin
         Connection.Params.Values['Password']  := IniFile.ReadString('MySQLConfig', 'Password', '');
         Connection.Params.Values['Database']  := IniFile.ReadString('MySQLConfig', 'Database', '');
         Connection.Params.Values['Port']      := IniFile.ReadString('MySQLConfig', 'Port', '');
+        SuprimirPergunta := IniFile.ReadString('MySQLConfig', 'SuprimirPergunta', '');
+
       finally
         IniFile.Free;
       end;
@@ -424,11 +439,6 @@ begin
             Qry:= TFDQuery.Create(nil);
             Qry.Connection:= Connection;
             try
-              Qry.SQL.Clear;
-
-              //Limpar Tabela
-              Qry.SQL.Add('DELETE FROM CLIENTES');
-              QRY.ExecSQL;
 
               Qry.SQL.Clear;
               Qry.SQL.Add('INSERT INTO clientes (' +
