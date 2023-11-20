@@ -494,7 +494,7 @@ object Form1: TForm1
       Top = 163
       Width = 191
       Height = 54
-      Caption = 'N; Registros Tabela Clientes'
+      Caption = 'N'#176' Registros Tabela Clientes'
       TabOrder = 26
       object lblNTabClientes: TLabel
         Left = 2
