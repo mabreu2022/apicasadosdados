@@ -514,6 +514,7 @@ object Form1: TForm1
         ExplicitHeight = 37
       end
     end
+<<<<<<< HEAD
     object GroupBox8: TGroupBox
       Left = 16
       Top = 157
@@ -522,6 +523,8 @@ object Form1: TForm1
       Caption = 'Duplicidade CNPJ'
       TabOrder = 27
     end
+=======
+>>>>>>> a1497b4087e82b51d3c80a8a11068047f25eda30
   end
   object DBGrid1: TDBGrid
     Left = 0
