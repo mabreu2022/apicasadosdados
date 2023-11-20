@@ -101,6 +101,8 @@ type
     lblRegistros: TLabel;
     cbUF: TComboBox;
     cbMunicipios: TComboBox;
+    GroupBox5: TGroupBox;
+    lblNCaracteres: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure cbUFChange(Sender: TObject);
@@ -226,7 +228,8 @@ begin
 
         TThread.Synchronize(nil, procedure
         begin
-         lblStatusCode.Caption:= '0';
+         lblStatusCode.Caption := '0';
+         lblNCaracteres.Caption:= '0';
         end);
 
           LResponse :=
@@ -250,16 +253,10 @@ begin
           begin
             lblStatusCode.Font.Color:= ClGreen;
             lblStatusCode.Caption:= IntToStr(LResponse.StatusCode);
+            lblNCaracteres.Caption:= IntToStr(LResponse.ContentLength);
 
             //Preenche o memo com o retorno da API
             memo1.Lines.Add(FormatarJSON(LResponse.Content));
-//            if LResponse.ContentLength = 58 then
-//            begin
-//             ShowMessage('Deu 58');
-//             TTHread.Current.Terminate;
-//            end;
-//            if ChaveCnpjExiste(TrimRight(LResponse.Content)) then
-//              Exit;
             memo1.Perform(WM_VSCROLL,SB_THUMBPOSITION,0);
             CarregarJSONParaFDMemTable(Memo1.Text, FDMemTable1);
           end);
@@ -274,6 +271,7 @@ begin
           begin
             lblStatusCode.Font.Color:= ClRed;
             lblStatusCode.Caption:= IntToStr(LResponse.StatusCode);
+            lblNCaracteres.Caption:= IntToStr(LResponse.ContentLength);
             ShowMessage('Não existem mais dados para essa pesquisa');
 
           end);
@@ -281,11 +279,6 @@ begin
 
         end;
       end;
-
-//      TTHread.Synchronize(nil,procedure
-//      begin
-//        Showmessage('Pesquisa Finalizada');
-//      end);
 
     end).Start;
      Except  on E: Exception do
