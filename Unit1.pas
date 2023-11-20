@@ -125,6 +125,7 @@ type
     StartTime: TDateTime;
     Connection: TFDConnection;
     IniFile: TIniFile;
+    Registros: Integer;
     procedure CarregarJSONParaFDMemTable(const JSONString: string; MemTable: TFDMemTable);
     function FormatarJSON(const ADados: string): string;
     procedure CarregarMunicipiosDoJSON(const JSON: string);
@@ -452,9 +453,14 @@ begin
         if AtivaDisableControls ='True' then
           FDMemTable1.DisableControls;
 
+        Registros :=0;
+
         MemTable.First;
         while not MemTable.Eof do
         begin
+            //numero de registros
+            Inc(Registros);
+
             Qry:= TFDQuery.Create(nil);
             Qry.Connection:= Connection;
 
@@ -517,6 +523,23 @@ begin
               end;
             finally
                QryVerificarCNPJ.Free;
+               //mostrar na tela o numero de registros gravados
+               TThread.Synchronize(nil, procedure
+               Var
+                 Qry: TFDQuery;
+               begin
+                 Qry:= TFDQuery.Create(nil);
+                 Qry.Connection:= Connection;
+                 try
+                   Qry.SQL.Clear;
+                   Qry.SQL.Add('SELECT COUNT(*) as total_registros FROM clientes');
+                   Qry.Open;
+                   lblNTabClientes.Caption:= Qry.FieldByName('total_registros').AsString;
+                 finally
+                   Qry.Free;
+                 end;
+
+               end);
             end;
 
         end;

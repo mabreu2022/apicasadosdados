@@ -23,6 +23,7 @@ object Form1: TForm1
     Align = alClient
     Caption = 'Par'#226'metros'
     TabOrder = 2
+    ExplicitTop = 239
     object Lbl_Estado: TLabel
       Left = 448
       Top = 17
@@ -489,16 +490,16 @@ object Form1: TForm1
     end
     object GroupBox7: TGroupBox
       Left = 940
-      Top = 163
+      Top = 161
       Width = 191
-      Height = 54
+      Height = 58
       Caption = 'N'#176' Registros Tabela Clientes'
       TabOrder = 26
       object lblNTabClientes: TLabel
         Left = 2
         Top = 17
         Width = 187
-        Height = 35
+        Height = 39
         Align = alClient
         Alignment = taCenter
         Caption = '0'
@@ -543,6 +544,7 @@ object Form1: TForm1
     Align = alTop
     ScrollBars = ssBoth
     TabOrder = 1
+    ExplicitWidth = 1130
   end
   object Panel1: TPanel
     Left = 0
@@ -551,6 +553,8 @@ object Form1: TForm1
     Height = 41
     Align = alBottom
     TabOrder = 3
+    ExplicitTop = 455
+    ExplicitWidth = 1130
     object Button1: TButton
       AlignWithMargins = True
       Left = 1048
@@ -562,6 +566,7 @@ object Form1: TForm1
       Caption = 'Enviar'
       TabOrder = 0
       OnClick = Button1Click
+      ExplicitLeft = 1044
     end
   end
   object FDMemTable1: TFDMemTable
